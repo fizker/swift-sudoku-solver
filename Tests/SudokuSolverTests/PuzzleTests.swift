@@ -2,7 +2,7 @@ import XCTest
 @testable import SudokuSolver
 
 class PuzzleTests: XCTestCase {
-	let fullPuzzle = try! Puzzle(cells: [
+	let solvedPuzzle = try! Puzzle(cells: [
 		8,3,1, 7,6,4, 2,5,9,
 		6,9,5, 2,8,1, 3,7,4,
 		4,7,2, 5,9,3, 8,6,1,
@@ -16,8 +16,22 @@ class PuzzleTests: XCTestCase {
 		3,2,9, 6,4,8, 7,1,5,
 	])
 
+	let unsolvedPuzzle = try! Puzzle(cells: [
+		0,3,1, 7,6,4, 2,5,9,
+		6,9,5, 2,8,1, 3,7,4,
+		4,7,2, 5,9,3, 8,6,1,
+
+		1,5,3, 8,2,9, 6,4,7,
+		9,8,7, 4,5,6, 1,3,2,
+		2,4,6, 1,3,7, 5,9,8,
+
+		7,6,8, 9,1,5, 4,2,3,
+		5,1,4, 3,7,2, 9,8,6,
+		3,2,9, 6,4,8, 7,1,5,
+	].map { $0 == 0 ? nil : $0 })
+
 	func test__columns__fullPuzzle__returnsExpectedCells() throws {
-		let columns = fullPuzzle.columns
+		let columns = solvedPuzzle.columns
 
 		XCTAssertEqual(columns, [
 			[ 8, 6, 4, 1, 9, 2, 7, 5, 3 ],
@@ -33,7 +47,7 @@ class PuzzleTests: XCTestCase {
 	}
 
 	func test__rows__fullPuzzle__returnsExpectedCells() throws {
-		let rows = fullPuzzle.rows
+		let rows = solvedPuzzle.rows
 
 		XCTAssertEqual(rows, [
 			[ 8, 3, 1, 7, 6, 4, 2, 5, 9 ],
@@ -49,7 +63,7 @@ class PuzzleTests: XCTestCase {
 	}
 
 	func test__groups__fullPuzzle__returnsExpectedCells() throws {
-		let groups = fullPuzzle.groups
+		let groups = solvedPuzzle.groups
 
 		XCTAssertEqual(groups, [
 			[
@@ -96,9 +110,19 @@ class PuzzleTests: XCTestCase {
 		])
 	}
 
+	func test__isSolved__puzzleIsSolved__returnsTrue() throws {
+		XCTAssertTrue(solvedPuzzle.isSolved)
+	}
+
+	func test__isSolved__puzzleIsNotSolved__returnsFalse() throws {
+		XCTAssertFalse(unsolvedPuzzle.isSolved)
+	}
+
 	static let allTests = [
 		("test__columns__fullPuzzle__returnsExpectedCells", test__columns__fullPuzzle__returnsExpectedCells),
 		("test__rows__fullPuzzle__returnsExpectedCells", test__rows__fullPuzzle__returnsExpectedCells),
 		("test__groups__fullPuzzle__returnsExpectedCells", test__groups__fullPuzzle__returnsExpectedCells),
+		("test__isSolved__puzzleIsSolved__returnsTrue", test__isSolved__puzzleIsSolved__returnsTrue),
+		("test__isSolved__puzzleIsNotSolved__returnsFalse", test__isSolved__puzzleIsNotSolved__returnsFalse),
 	]
 }

@@ -18,6 +18,8 @@ public struct Puzzle {
 		self.cells = cells
 	}
 
+	public var isSolved: Bool { !cells.contains(nil) }
+
 	/// The cells as represented by columns
 	var columns: [[Int?]] {
 		var columns = [[Int?]](repeating: [Int?](repeating: nil, count: 9), count: 9)
