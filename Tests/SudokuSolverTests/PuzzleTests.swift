@@ -302,6 +302,168 @@ class PuzzleTests: XCTestCase {
 		XCTAssertEqual(actual, expected)
 	}
 
+	func test__candidatesForCell__cellHasValue__returnsNoCandidates() throws {
+		let cell = unsolvedPuzzle.cells.first { $0.hasValue }!
+
+		let candidates = unsolvedPuzzle.candidates(for: cell)
+
+		XCTAssertEqual(candidates, [])
+	}
+
+	func test__candidatesForCell__cellHasNoValue_onlyCellWithoutValue__returnsMissingNumber() throws {
+		let puzzle = Puzzle("""
+			-31 764 259
+			695 281 374
+			472 593 861
+
+			153 829 647
+			987 456 132
+			246 137 598
+
+			768 915 423
+			514 372 986
+			329 648 715
+			"""
+		)!
+
+		let cell = puzzle.cells[0]
+		let candidates = puzzle.candidates(for: cell)
+
+		XCTAssertEqual(candidates, [8])
+	}
+
+	func test__candidatesForCell__cellHasNoValue_multipleMissingInGroup_oneMissingInRow_oneMissingInColumn__returnsMissingNumber() throws {
+		let puzzle = try Puzzle(dsl: """
+			-31 764 259
+			695 281 374
+			47- 593 861
+
+			153 829 647
+			987 456 132
+			246 137 598
+
+			768 915 423
+			514 372 986
+			329 648 715
+			"""
+		)
+
+		let cell = puzzle.cells[0]
+		let candidates = puzzle.candidates(for: cell)
+
+		XCTAssertEqual(candidates, [8])
+	}
+
+	func test__candidatesForCell__cellHasNoValue_multipleMissingInGroup_multipleMissingInRow_oneMissingInColumn__returnsMissingNumber() throws {
+		let puzzle = try Puzzle(dsl: """
+			-31 764 -59
+			695 281 374
+			47- 593 861
+
+			153 829 647
+			987 456 132
+			246 137 598
+
+			768 915 423
+			514 372 986
+			329 648 715
+			"""
+		)
+
+		let cell = puzzle.cells[0]
+		let candidates = puzzle.candidates(for: cell)
+
+		XCTAssertEqual(candidates, [8])
+	}
+
+	func test__candidatesForCell__cellHasNoValue_multipleMissingInGroup_oneMissingInRow_multipleMissingInColumn__returnsMissingNumber() throws {
+		let puzzle = try Puzzle(dsl: """
+			-31 764 259
+			695 281 374
+			47- 593 861
+
+			153 829 647
+			987 456 132
+			-46 137 598
+
+			768 915 423
+			514 372 986
+			329 648 715
+			"""
+		)
+
+		let cell = puzzle.cells[0]
+		let candidates = puzzle.candidates(for: cell)
+
+		XCTAssertEqual(candidates, [8])
+	}
+
+	func test__candidatesForCell__cellHasNoValue_oneMissingInGroup_multipleMissingInRow_multipleMissingInColumn__returnsMissingNumber() throws {
+		let puzzle = try Puzzle(dsl: """
+			-31 764 -59
+			695 281 374
+			472 593 861
+
+			153 829 647
+			987 456 132
+			-46 137 598
+
+			768 915 423
+			514 372 986
+			329 648 715
+			"""
+		)
+
+		let cell = puzzle.cells[0]
+		let candidates = puzzle.candidates(for: cell)
+
+		XCTAssertEqual(candidates, [8])
+	}
+
+	func test__candidatesForCell__cellHasNoValue_sameOtherNumberMissingInGroupAndRowAndColumn__returnsAllMissingNumbers() throws {
+		let puzzle = try Puzzle(dsl: """
+			-31 764 -59
+			695 281 374
+			47- 593 861
+
+			153 829 647
+			987 456 132
+			-46 137 598
+
+			768 915 423
+			514 372 986
+			329 648 715
+			"""
+		)
+
+		let cell = puzzle.cells[0]
+		let candidates = puzzle.candidates(for: cell)
+
+		XCTAssertEqual(candidates, [2, 8])
+	}
+
+	func test__candidatesForCell__cellHasNoValue_sameOtherNumberMissingInGroupAndRow_differentNumberMissingInColumn__returnsSingleMissingNumber() throws {
+		let puzzle = try Puzzle(dsl: """
+			-31 764 -59
+			695 281 374
+			47- 593 861
+
+			153 829 647
+			-87 456 132
+			246 137 598
+
+			768 915 423
+			514 372 986
+			329 648 715
+			"""
+		)
+
+		let cell = puzzle.cells[0]
+		let candidates = puzzle.candidates(for: cell)
+
+		XCTAssertEqual(candidates, [8])
+	}
+
 	static let allTests = [
 		("test__initWithCellValues__fullPuzzle__addsCorrectRowAndColumnAndGroupToCells", test__initWithCellValues__fullPuzzle__addsCorrectRowAndColumnAndGroupToCells),
 		("test__columns__fullPuzzle__returnsExpectedCells", test__columns__fullPuzzle__returnsExpectedCells),

@@ -65,6 +65,28 @@ public struct Puzzle: Equatable {
 
 	public var isSolved: Bool { cells.allSatisfy { $0.hasValue } }
 
+	func candidates(for cell: Cell) -> [Int] {
+		guard !cell.hasValue
+		else { return [] }
+
+		var candidates = [1,2,3,4,5,6,7,8,9]
+
+		for c in cells {
+			guard !candidates.isEmpty
+			else { return [] }
+
+			guard c.row == cell.row || c.column == cell.column || c.group == cell.group
+			else { continue }
+
+			guard let v = c.value
+			else { continue }
+
+			candidates.removeAll { $0 == v }
+		}
+
+		return candidates
+	}
+
 	/// The cells as represented by columns
 	var columns: [[Cell]] {
 		var columns = [[Cell]](repeating: [Cell](repeating: Cell(value: 0, row: 0, column: 0, group: 0), count: 9), count: 9)
