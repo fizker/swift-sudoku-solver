@@ -118,6 +118,23 @@ class PuzzleTests: XCTestCase {
 		XCTAssertFalse(unsolvedPuzzle.isSolved)
 	}
 
+	func test__equals__puzzlesAreEqual__returnsTrue() throws {
+		let cells = solvedPuzzle.cells
+		let a = try Puzzle(cells: cells)
+		let b = try Puzzle(cells: cells)
+
+		XCTAssertEqual(a, b)
+	}
+
+	func test__equals__puzzlesAreNotEqual__returnsTrue() throws {
+		var cells = solvedPuzzle.cells
+		let a = try Puzzle(cells: cells)
+		cells[0] = nil
+		let b = try Puzzle(cells: cells)
+
+		XCTAssertNotEqual(a, b)
+	}
+
 	static let allTests = [
 		("test__columns__fullPuzzle__returnsExpectedCells", test__columns__fullPuzzle__returnsExpectedCells),
 		("test__rows__fullPuzzle__returnsExpectedCells", test__rows__fullPuzzle__returnsExpectedCells),

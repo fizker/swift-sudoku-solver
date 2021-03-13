@@ -1,6 +1,6 @@
 import Foundation
 
-public struct Puzzle {
+public struct Puzzle: Equatable {
 	/// Cells for a standard 9x9 puzzle match the array like so:
 	/// ```
 	/// [
