@@ -1,6 +1,5 @@
 public class Solver {
 	private let solvers = [
-		lastRemainingCell(puzzle:),
 		nakedSingle(puzzle:),
 	]
 
