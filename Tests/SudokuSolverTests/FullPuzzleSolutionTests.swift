@@ -49,8 +49,29 @@ class FullPuzzleSolutionTests: XCTestCase {
 		XCTAssertFalse(solved.isSolved)
 	}
 
+	func test_solve_puzzleWithNakedSinglesOnly() throws {
+		let puzzle = try Puzzle(dsl: """
+			5-- 139 ---
+			-21 -87 --9
+			-98 -4- 5--
+
+			48- 7-- 6--
+			-3- 8-- -57
+			2-- -9- -14
+
+			-65 91- ---
+			943 --8 -65
+			7-2 --- --8
+			"""
+		)
+
+		let solved = solve(puzzle)
+		XCTAssertIsSolved(solved)
+	}
+
 	static let allTests = [
 		("test__solve__puzzleWith4MissingValues", test__solve__puzzleWith4MissingValues),
-		("test__solve__puzzleIsUnsolvable__theSolverReturnsThePuzzleUnsolved", test__solve__puzzleIsUnsolvable__theSolverReturnsThePuzzleUnsolved)
+		("test__solve__puzzleIsUnsolvable__theSolverReturnsThePuzzleUnsolved", test__solve__puzzleIsUnsolvable__theSolverReturnsThePuzzleUnsolved),
+		("test_solve_puzzleWithNakedSinglesOnly", test_solve_puzzleWithNakedSinglesOnly),
 	]
 }
