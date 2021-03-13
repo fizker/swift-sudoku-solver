@@ -18,6 +18,14 @@ public struct Puzzle: Equatable {
 		self.cells = cells
 	}
 
+	mutating func updateCell(value: Int?, row: Int, column: Int) throws {
+		try updateCell(value: value, rowIndex: row - 1, columnIndex: column - 1)
+	}
+
+	mutating func updateCell(value: Int?, rowIndex: Int, columnIndex: Int) throws {
+		cells[rowIndex * 9 + columnIndex] = value
+	}
+
 	public var isSolved: Bool { !cells.contains(nil) }
 
 	/// The cells as represented by columns

@@ -10,8 +10,20 @@ func lastRemainingCell(puzzle p: Puzzle) -> Puzzle {
 		let missingValues = possibleValues.filter { !row.contains($0) }
 
 		if missingValues.count == 1, let columnIndex = row.firstIndex(of: nil) {
-			puzzle.cells[rowIndex * 9 + columnIndex] = missingValues[0]
-			break
+			try! puzzle.updateCell(value: missingValues[0], rowIndex: rowIndex, columnIndex: columnIndex)
+			return puzzle
+		}
+	}
+
+	var columnIndex = 0
+	for column in puzzle.columns {
+		defer { columnIndex += 1 }
+
+		let missingValues = possibleValues.filter { !column.contains($0) }
+
+		if missingValues.count == 1, let rowIndex = column.firstIndex(of: nil) {
+			try! puzzle.updateCell(value: missingValues[0], rowIndex: rowIndex, columnIndex: columnIndex)
+			return puzzle
 		}
 	}
 
