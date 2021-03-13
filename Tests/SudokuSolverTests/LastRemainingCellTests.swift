@@ -102,9 +102,42 @@ class LastRemainingCellTests: XCTestCase {
 		""")
 	}
 
+	func test__multipleItemsMissingInRowAndColumn_singleItemMissingInGroup__addsInTheMissingGroup() throws {
+		let puzzle = try Puzzle(dsl: """
+		831 764 259
+		695 281 374
+		-72 5-3 861
+
+		153 829 647
+		-87 4-6 132
+		246 137 598
+
+		768 915 423
+		514 372 986
+		329 648 715
+		""")
+
+		let solved = lastRemainingCell(puzzle: puzzle)
+
+		XCTAssertEqual(solved.description, """
+		831 764 259
+		695 281 374
+		472 5-3 861
+
+		153 829 647
+		-87 4-6 132
+		246 137 598
+
+		768 915 423
+		514 372 986
+		329 648 715
+		""")
+	}
+
 	static let allTests = [
 		("test__singleValueMissing__addsMissingValue", test__singleValueMissing__addsMissingValue),
 		("test__twoValuesMissing__addsOneMissingValue", test__twoValuesMissing__addsOneMissingValue),
 		("test__multipleItemsMissingInRow_singleItemMissingInColumn__addsInTheMissingColumn", test__multipleItemsMissingInRow_singleItemMissingInColumn__addsInTheMissingColumn),
+		("test__multipleItemsMissingInRowAndColumn_singleItemMissingInGroup__addsInTheMissingGroup", test__multipleItemsMissingInRowAndColumn_singleItemMissingInGroup__addsInTheMissingGroup),
 	]
 }
