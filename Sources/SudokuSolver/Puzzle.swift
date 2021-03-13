@@ -4,11 +4,12 @@ public struct Cell: Equatable, CustomStringConvertible, CustomDebugStringConvert
 	public var value: Int?
 	public let row: Int
 	public let column: Int
+	public let group: Int
 
 	public var hasValue: Bool { value != nil }
 
 	public var description: String { value?.description ?? "-" }
-	public var debugDescription: String { "\(description) (\(column)x\(row))" }
+	public var debugDescription: String { "\(description) (r\(row)c\(column)g\(group)" }
 }
 
 public struct Puzzle: Equatable {
@@ -32,14 +33,20 @@ public struct Puzzle: Equatable {
 	public init(cellValues: [Int?]) throws {
 		var row = 1
 		var column = 0
+		var rg = 0
 		try self.init(cells: cellValues.map {
 			if column == 9 {
 				column = 0
 				row += 1
+				// The `x / 3 * 3` does a thing, because we are in Int-land;
+				// the calculation is not lossless
+				rg = (row-1) / 3 * 3
 			}
 			column += 1
 
-			return Cell(value: $0, row: row, column: column)
+			let groupIndex = rg + (column-1) / 3
+
+			return Cell(value: $0, row: row, column: column, group: groupIndex + 1)
 		})
 	}
 
@@ -60,7 +67,7 @@ public struct Puzzle: Equatable {
 
 	/// The cells as represented by columns
 	var columns: [[Cell]] {
-		var columns = [[Cell]](repeating: [Cell](repeating: Cell(value: 0, row: 0, column: 0), count: 9), count: 9)
+		var columns = [[Cell]](repeating: [Cell](repeating: Cell(value: 0, row: 0, column: 0, group: 0), count: 9), count: 9)
 
 		for column in 0..<9 {
 			for row in 0..<9 {
@@ -72,7 +79,7 @@ public struct Puzzle: Equatable {
 	}
 
 	var rows: [[Cell]] {
-		var rows = [[Cell]](repeating: [Cell](repeating: Cell(value: 0, row: 0, column: 0), count: 9), count: 9)
+		var rows = [[Cell]](repeating: [Cell](repeating: Cell(value: 0, row: 0, column: 0, group: 0), count: 9), count: 9)
 
 		for row in 0..<9 {
 			for column in 0..<9 {
@@ -84,7 +91,7 @@ public struct Puzzle: Equatable {
 	}
 
 	var groups: [[Cell]] {
-		var groups = [[Cell]](repeating: [Cell](repeating: Cell(value: 0, row: 0, column: 0), count: 9), count: 9)
+		var groups = [[Cell]](repeating: [Cell](repeating: Cell(value: 0, row: 0, column: 0, group: 0), count: 9), count: 9)
 
 		for row in 0..<9 {
 			let rg = row / 3

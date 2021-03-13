@@ -30,25 +30,27 @@ class PuzzleTests: XCTestCase {
 		3,2,9, 6,4,8, 7,1,5,
 	].map { $0 == 0 ? nil : $0 })
 
-	func test__initWithCellValues__fullPuzzle__addsCorrectRowAndColumnToCells() throws {
+	func test__initWithCellValues__fullPuzzle__addsCorrectRowAndColumnAndGroupToCells() throws {
 		let puzzle = try Puzzle(cellValues: [
-			8,3,1, 7,6,4, 2,5,9,
-			6,9,5, 2,8,1, 3,7,4,
-			4,7,2, 5,9,3, 8,6,1,
+			8,3,1, 7,6,4, 2,5,9, // 0-8
+			6,9,5, 2,8,1, 3,7,4, // 9-17
+			4,7,2, 5,9,3, 8,6,1, // 18-26
 
-			1,5,3, 8,2,9, 6,4,7,
-			9,8,7, 4,5,6, 1,3,2,
-			2,4,6, 1,3,7, 5,9,8,
+			1,5,3, 8,2,9, 6,4,7, // 27-35
+			9,8,7, 4,5,6, 1,3,2, // 36-44
+			2,4,6, 1,3,7, 5,9,8, // 45-53
 
-			7,6,8, 9,1,5, 4,2,3,
-			5,1,4, 3,7,2, 9,8,6,
-			3,2,9, 6,4,8, 7,1,5,
+			7,6,8, 9,1,5, 4,2,3, // 54-62
+			5,1,4, 3,7,2, 9,8,6, // 63-71
+			3,2,9, 6,4,8, 7,1,5, // 72-80
 		])
 
-		XCTAssertEqual(puzzle.cells[0], Cell(value: 8, row: 1, column: 1), puzzle.cells[0].debugDescription)
-		XCTAssertEqual(puzzle.cells[3], Cell(value: 7, row: 1, column: 4), puzzle.cells[3].debugDescription)
-		XCTAssertEqual(puzzle.cells[20], Cell(value: 2, row: 3, column: 3), puzzle.cells[20].debugDescription)
-		XCTAssertEqual(puzzle.cells[22], Cell(value: 9, row: 3, column: 5), puzzle.cells[22].debugDescription)
+		XCTAssertEqual(puzzle.cells[0], Cell(value: 8, row: 1, column: 1, group: 1), puzzle.cells[0].debugDescription)
+		XCTAssertEqual(puzzle.cells[3], Cell(value: 7, row: 1, column: 4, group: 2), puzzle.cells[3].debugDescription)
+		XCTAssertEqual(puzzle.cells[20], Cell(value: 2, row: 3, column: 3, group: 1), puzzle.cells[20].debugDescription)
+		XCTAssertEqual(puzzle.cells[22], Cell(value: 9, row: 3, column: 5, group: 2), puzzle.cells[22].debugDescription)
+		XCTAssertEqual(puzzle.cells[40], Cell(value: 5, row: 5, column: 5, group: 5), puzzle.cells[40].debugDescription)
+		XCTAssertEqual(puzzle.cells[70], Cell(value: 8, row: 8, column: 8, group: 9), puzzle.cells[42].debugDescription)
 	}
 
 	func test__columns__fullPuzzle__returnsExpectedCells() throws {
@@ -301,6 +303,7 @@ class PuzzleTests: XCTestCase {
 	}
 
 	static let allTests = [
+		("test__initWithCellValues__fullPuzzle__addsCorrectRowAndColumnAndGroupToCells", test__initWithCellValues__fullPuzzle__addsCorrectRowAndColumnAndGroupToCells),
 		("test__columns__fullPuzzle__returnsExpectedCells", test__columns__fullPuzzle__returnsExpectedCells),
 		("test__rows__fullPuzzle__returnsExpectedCells", test__rows__fullPuzzle__returnsExpectedCells),
 		("test__groups__fullPuzzle__returnsExpectedCells", test__groups__fullPuzzle__returnsExpectedCells),
