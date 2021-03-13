@@ -2,7 +2,7 @@ import XCTest
 @testable import SudokuSolver
 
 class PuzzleTests: XCTestCase {
-	let solvedPuzzle = try! Puzzle(cells: [
+	let solvedPuzzle = try! Puzzle(cellValues: [
 		8,3,1, 7,6,4, 2,5,9,
 		6,9,5, 2,8,1, 3,7,4,
 		4,7,2, 5,9,3, 8,6,1,
@@ -16,7 +16,7 @@ class PuzzleTests: XCTestCase {
 		3,2,9, 6,4,8, 7,1,5,
 	])
 
-	let unsolvedPuzzle = try! Puzzle(cells: [
+	let unsolvedPuzzle = try! Puzzle(cellValues: [
 		0,3,1, 7,6,4, 2,5,9,
 		6,9,5, 2,8,1, 3,7,4,
 		4,7,2, 5,9,3, 8,6,1,
@@ -30,8 +30,29 @@ class PuzzleTests: XCTestCase {
 		3,2,9, 6,4,8, 7,1,5,
 	].map { $0 == 0 ? nil : $0 })
 
+	func test__initWithCellValues__fullPuzzle__addsCorrectRowAndColumnToCells() throws {
+		let puzzle = try Puzzle(cellValues: [
+			8,3,1, 7,6,4, 2,5,9,
+			6,9,5, 2,8,1, 3,7,4,
+			4,7,2, 5,9,3, 8,6,1,
+
+			1,5,3, 8,2,9, 6,4,7,
+			9,8,7, 4,5,6, 1,3,2,
+			2,4,6, 1,3,7, 5,9,8,
+
+			7,6,8, 9,1,5, 4,2,3,
+			5,1,4, 3,7,2, 9,8,6,
+			3,2,9, 6,4,8, 7,1,5,
+		])
+
+		XCTAssertEqual(puzzle.cells[0], Cell(value: 8, row: 1, column: 1), puzzle.cells[0].debugDescription)
+		XCTAssertEqual(puzzle.cells[3], Cell(value: 7, row: 1, column: 4), puzzle.cells[3].debugDescription)
+		XCTAssertEqual(puzzle.cells[20], Cell(value: 2, row: 3, column: 3), puzzle.cells[20].debugDescription)
+		XCTAssertEqual(puzzle.cells[22], Cell(value: 9, row: 3, column: 5), puzzle.cells[22].debugDescription)
+	}
+
 	func test__columns__fullPuzzle__returnsExpectedCells() throws {
-		let columns = solvedPuzzle.columns
+		let columns = solvedPuzzle.columns.map { $0.map { $0.value } }
 
 		XCTAssertEqual(columns, [
 			[ 8, 6, 4, 1, 9, 2, 7, 5, 3 ],
@@ -47,7 +68,7 @@ class PuzzleTests: XCTestCase {
 	}
 
 	func test__rows__fullPuzzle__returnsExpectedCells() throws {
-		let rows = solvedPuzzle.rows
+		let rows = solvedPuzzle.rows.map { $0.map { $0.value } }
 
 		XCTAssertEqual(rows, [
 			[ 8, 3, 1, 7, 6, 4, 2, 5, 9 ],
@@ -63,7 +84,7 @@ class PuzzleTests: XCTestCase {
 	}
 
 	func test__groups__fullPuzzle__returnsExpectedCells() throws {
-		let groups = solvedPuzzle.groups
+		let groups = solvedPuzzle.groups.map { $0.map { $0.value } }
 
 		XCTAssertEqual(groups, [
 			[
@@ -129,7 +150,7 @@ class PuzzleTests: XCTestCase {
 	func test__equals__puzzlesAreNotEqual__returnsTrue() throws {
 		var cells = solvedPuzzle.cells
 		let a = try Puzzle(cells: cells)
-		cells[0] = nil
+		cells[0].value = nil
 		let b = try Puzzle(cells: cells)
 
 		XCTAssertNotEqual(a, b)

@@ -1,5 +1,16 @@
 import Foundation
 
+public struct Cell: Equatable, CustomStringConvertible, CustomDebugStringConvertible {
+	public var value: Int?
+	public let row: Int
+	public let column: Int
+
+	public var hasValue: Bool { value != nil }
+
+	public var description: String { value?.description ?? "-" }
+	public var debugDescription: String { "\(description) (\(column)x\(row))" }
+}
+
 public struct Puzzle: Equatable {
 	/// Cells for a standard 9x9 puzzle match the array like so:
 	/// ```
@@ -11,26 +22,39 @@ public struct Puzzle: Equatable {
 	/// ```
 	///
 	/// Any unfilled cell is represented by nil
-	var cells: [Int?]
+	var cells: [Cell]
 
-	/// Default constructor. Throws if the given cells are not in a legal constellation
-	public init(cells: [Int?]) throws {
+	init(cells: [Cell]) throws {
 		self.cells = cells
 	}
 
-	mutating func updateCell(value: Int?, row: Int, column: Int) throws {
-		try updateCell(value: value, rowIndex: row - 1, columnIndex: column - 1)
+	/// Default constructor. Throws if the given cells are not in a legal constellation
+	public init(cellValues: [Int?]) throws {
+		var row = 1
+		var column = 0
+		try self.init(cells: cellValues.map {
+			if column == 9 {
+				column = 0
+				row += 1
+			}
+			column += 1
+
+			return Cell(value: $0, row: row, column: column)
+		})
 	}
 
-	mutating func updateCell(value: Int?, rowIndex: Int, columnIndex: Int) throws {
-		cells[rowIndex * 9 + columnIndex] = value
+	mutating func updateCell(_ cell: Cell) {
+		let rowIndex = cell.row - 1
+		let columnIndex = cell.column - 1
+		let index = rowIndex * 9 + columnIndex
+		cells[index] = cell
 	}
 
-	public var isSolved: Bool { !cells.contains(nil) }
+	public var isSolved: Bool { cells.allSatisfy { $0.hasValue } }
 
 	/// The cells as represented by columns
-	var columns: [[Int?]] {
-		var columns = [[Int?]](repeating: [Int?](repeating: nil, count: 9), count: 9)
+	var columns: [[Cell]] {
+		var columns = [[Cell]](repeating: [Cell](repeating: Cell(value: 0, row: 0, column: 0), count: 9), count: 9)
 
 		for column in 0..<9 {
 			for row in 0..<9 {
@@ -41,8 +65,8 @@ public struct Puzzle: Equatable {
 		return columns
 	}
 
-	var rows: [[Int?]] {
-		var rows = [[Int?]](repeating: [Int?](repeating: nil, count: 9), count: 9)
+	var rows: [[Cell]] {
+		var rows = [[Cell]](repeating: [Cell](repeating: Cell(value: 0, row: 0, column: 0), count: 9), count: 9)
 
 		for row in 0..<9 {
 			for column in 0..<9 {
@@ -53,8 +77,8 @@ public struct Puzzle: Equatable {
 		return rows
 	}
 
-	var groups: [[Int?]] {
-		var groups = [[Int?]](repeating: [Int?](repeating: nil, count: 9), count: 9)
+	var groups: [[Cell]] {
+		var groups = [[Cell]](repeating: [Cell](repeating: Cell(value: 0, row: 0, column: 0), count: 9), count: 9)
 
 		for row in 0..<9 {
 			let rg = row / 3
@@ -93,7 +117,7 @@ extension Puzzle: CustomStringConvertible {
 			return first + [separator] + second + [separator] + third
 		}
 
-		let r = rows.map { add(" ", to: $0.map { $0?.description ?? "-" }).joined() }
+		let r = rows.map { add(" ", to: $0.map { $0.description }).joined() }
 
 		return add("", to: r).joined(separator: "\n")
 	}
@@ -124,7 +148,7 @@ extension Puzzle: LosslessStringConvertible {
 
 		let cells = rows.flatMap { $0.map { Int("\($0)") } }
 
-		try self.init(cells: cells)
+		try self.init(cellValues: cells)
 	}
 
 	public init?(_ description: String) {

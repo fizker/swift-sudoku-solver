@@ -4,7 +4,7 @@ import XCTest
 class LastRemainingCellTests: XCTestCase {
 	func test__singleValueMissing__addsMissingValue() throws {
 		let puzzle = try Puzzle(dsl: """
-			-31 764 259
+			8-1 764 259
 			695 281 374
 			472 593 861
 
@@ -38,7 +38,7 @@ class LastRemainingCellTests: XCTestCase {
 
 	func test__twoValuesMissing__addsOneMissingValue() throws {
 		let puzzle = try Puzzle(dsl: """
-			-31 764 259
+			8-1 764 259
 			695 281 374
 			472 593 86-
 
