@@ -260,6 +260,25 @@ class PuzzleTests: XCTestCase {
 		}
 	}
 
+	func test__description__puzzleWithEmptyValues__returnsValidValue() throws {
+		let expected = """
+			-31 764 259
+			695 281 374
+			472 593 861
+
+			153 829 647
+			987 456 132
+			246 137 598
+
+			768 915 423
+			514 372 986
+			329 648 715
+			"""
+		let actual = unsolvedPuzzle.description
+
+		XCTAssertEqual(actual, expected)
+	}
+
 	static let allTests = [
 		("test__columns__fullPuzzle__returnsExpectedCells", test__columns__fullPuzzle__returnsExpectedCells),
 		("test__rows__fullPuzzle__returnsExpectedCells", test__rows__fullPuzzle__returnsExpectedCells),
@@ -270,5 +289,6 @@ class PuzzleTests: XCTestCase {
 		("test__initFromDSL__validFormsOfUnsolvedPuzzle__createsValidPuzzles", test__initFromDSL__validFormsOfUnsolvedPuzzle__createsValidPuzzles),
 		("test__initFromDSL__cellMissingInRow__throws", test__initFromDSL__cellMissingInRow__throws),
 		("test__initFromDSL__rowMissing__throws", test__initFromDSL__rowMissing__throws),
+		("test__description__puzzleWithEmptyValues__returnsValidValue", test__description__puzzleWithEmptyValues__returnsValidValue),
 	]
 }

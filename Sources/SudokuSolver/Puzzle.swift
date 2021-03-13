@@ -76,13 +76,28 @@ public struct Puzzle: Equatable {
 	}
 }
 
+extension Puzzle: CustomStringConvertible {
+	public var description: String {
+		func add(_ separator: String, to array: [String]) -> [String] {
+			let first = Array(array[0..<3])
+			let second = Array(array[3..<6])
+			let third = Array(array[6...])
+			return first + [separator] + second + [separator] + third
+		}
+
+		let r = rows.map { add(" ", to: $0.map { $0?.description ?? "-" }).joined() }
+
+		return add("", to: r).joined(separator: "\n")
+	}
+}
+
 public enum DSLParseError : Error {
 	case invalidRowCount
 	case invalidCellCount(rowIndex:Int)
 }
 
-public extension Puzzle {
-	init(dsl: String) throws {
+extension Puzzle: LosslessStringConvertible {
+	public init(dsl: String) throws {
 		let rows = dsl
 			.components(separatedBy: .newlines)
 			.map { $0.trimmingCharacters(in: .whitespaces) }
@@ -102,5 +117,13 @@ public extension Puzzle {
 		let cells = rows.flatMap { $0.map { Int("\($0)") } }
 
 		try self.init(cells: cells)
+	}
+
+	public init?(_ description: String) {
+		do {
+			try self.init(dsl: description)
+		} catch {
+			return nil
+		}
 	}
 }
