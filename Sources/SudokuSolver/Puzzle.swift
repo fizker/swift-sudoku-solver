@@ -75,3 +75,32 @@ public struct Puzzle: Equatable {
 		return groups
 	}
 }
+
+public enum DSLParseError : Error {
+	case invalidRowCount
+	case invalidCellCount(rowIndex:Int)
+}
+
+public extension Puzzle {
+	init(dsl: String) throws {
+		let rows = dsl
+			.components(separatedBy: .newlines)
+			.map { $0.trimmingCharacters(in: .whitespaces) }
+			.map { String($0.filter { " " != $0 }) }
+			.filter { !$0.isEmpty }
+
+		guard rows.count == 9
+		else { throw DSLParseError.invalidRowCount }
+
+		var rowIndex = 0
+		for row in rows {
+			guard row.count == 9
+			else { throw DSLParseError.invalidCellCount(rowIndex: rowIndex) }
+			rowIndex += 1
+		}
+
+		let cells = rows.flatMap { $0.map { Int("\($0)") } }
+
+		try self.init(cells: cells)
+	}
+}

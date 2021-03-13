@@ -135,11 +135,140 @@ class PuzzleTests: XCTestCase {
 		XCTAssertNotEqual(a, b)
 	}
 
+	func test__initFromDSL__validFormsOfSolvedPuzzle__createsValidPuzzles() throws {
+		let inputs: [(description: String, dsl: String)] = [
+			("With whitespace", """
+			831 764 259
+			695 281 374
+			472 593 861
+
+			153 829 647
+			987 456 132
+			246 137 598
+
+			768 915 423
+			514 372 986
+			329 648 715
+			"""),
+			("Without whitespace", """
+			831764259
+			695281374
+			472593861
+			153829647
+			987456132
+			246137598
+			768915423
+			514372986
+			329648715
+			"""),
+		]
+
+		for test in inputs {
+			do {
+				let puzzle = try Puzzle(dsl: test.dsl)
+				XCTAssertEqual(puzzle, solvedPuzzle, test.description)
+			} catch {
+				func t(_ error: Error) throws { throw error }
+				XCTAssertNoThrow(try t(error), test.description)
+			}
+		}
+	}
+
+	func test__initFromDSL__validFormsOfUnsolvedPuzzle__createsValidPuzzles() throws {
+		let inputs: [(description: String, dsl: String)] = [
+			("With whitespace", """
+			-31 764 259
+			695 281 374
+			472 593 861
+
+			153 829 647
+			987 456 132
+			246 137 598
+
+			768 915 423
+			514 372 986
+			329 648 715
+			"""),
+			("Without whitespace", """
+			-31764259
+			695281374
+			472593861
+			153829647
+			987456132
+			246137598
+			768915423
+			514372986
+			329648715
+			"""),
+		]
+
+		for test in inputs {
+			do {
+				let puzzle = try Puzzle(dsl: test.dsl)
+				XCTAssertEqual(puzzle, unsolvedPuzzle, test.description)
+			} catch {
+				func t(_ error: Error) throws { throw error }
+				XCTAssertNoThrow(try t(error), test.description)
+			}
+		}
+	}
+
+	func test__initFromDSL__cellMissingInRow__throws() throws {
+		let dsl = """
+			831 764 259
+			695 281 374
+			472 593 861
+
+			153 829 647
+			987 456 132
+			246 137 598
+
+			768 915 423
+			514 372 986
+			329 648 71
+			"""
+		XCTAssertThrowsError(try Puzzle(dsl: dsl)) { (error) in
+			switch error as? DSLParseError {
+			case let .invalidCellCount(rowIndex: index):
+				XCTAssertEqual(index, 8)
+			default:
+				XCTFail()
+			}
+		}
+	}
+
+	func test__initFromDSL__rowMissing__throws() throws {
+		let dsl = """
+			831 764 259
+			695 281 374
+			472 593 861
+
+			153 829 647
+			987 456 132
+			246 137 598
+
+			768 915 423
+			514 372 986
+			"""
+		XCTAssertThrowsError(try Puzzle(dsl: dsl)) { (error) in
+			switch error as? DSLParseError {
+			case .invalidRowCount:
+				break
+			default:
+				XCTFail()
+			}
+		}
+	}
+
 	static let allTests = [
 		("test__columns__fullPuzzle__returnsExpectedCells", test__columns__fullPuzzle__returnsExpectedCells),
 		("test__rows__fullPuzzle__returnsExpectedCells", test__rows__fullPuzzle__returnsExpectedCells),
 		("test__groups__fullPuzzle__returnsExpectedCells", test__groups__fullPuzzle__returnsExpectedCells),
 		("test__isSolved__puzzleIsSolved__returnsTrue", test__isSolved__puzzleIsSolved__returnsTrue),
 		("test__isSolved__puzzleIsNotSolved__returnsFalse", test__isSolved__puzzleIsNotSolved__returnsFalse),
+		("test__initFromDSL__validFormsOfSolvedPuzzle__createsValidPuzzles", test__initFromDSL__validFormsOfSolvedPuzzle__createsValidPuzzles),
+		("test__initFromDSL__validFormsOfUnsolvedPuzzle__createsValidPuzzles", test__initFromDSL__validFormsOfUnsolvedPuzzle__createsValidPuzzles),
+		("test__initFromDSL__cellMissingInRow__throws", test__initFromDSL__cellMissingInRow__throws),
+		("test__initFromDSL__rowMissing__throws", test__initFromDSL__rowMissing__throws),
 	]
 }
