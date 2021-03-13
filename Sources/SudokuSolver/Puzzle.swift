@@ -43,6 +43,12 @@ public struct Puzzle: Equatable {
 		})
 	}
 
+	func updatingCell(_ cell: Cell) -> Puzzle {
+		var copy = self
+		copy.updateCell(cell)
+		return copy
+	}
+
 	mutating func updateCell(_ cell: Cell) {
 		let rowIndex = cell.row - 1
 		let columnIndex = cell.column - 1
