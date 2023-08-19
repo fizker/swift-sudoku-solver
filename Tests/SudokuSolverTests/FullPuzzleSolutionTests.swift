@@ -3,11 +3,7 @@ import XCTest
 import SudokuSolver
 
 func XCTAssertIsSolved(_ puzzle: Puzzle) {
-	XCTAssertIsSolved(puzzle, puzzle.description)
-}
-
-func XCTAssertIsSolved(_ puzzle: Puzzle, _ description: String) {
-	XCTAssertTrue(puzzle.isSolved, "Puzzle description:\n" + description)
+	XCTAssertTrue(puzzle.isSolved, "Puzzle description:\n" + puzzle.description)
 }
 
 class FullPuzzleSolutionTests: XCTestCase {
@@ -89,5 +85,55 @@ class FullPuzzleSolutionTests: XCTestCase {
 
 		let solved = solve(puzzle)
 		XCTAssertIsSolved(solved)
+	}
+
+	func test__solve__puzzleWithHiddenSingles__puzzlesAreSolved() async throws {
+		let dsl = """
+		--- --- 9-1
+		--8 1-- 3--
+		-4- --- --5
+
+		--9 685 -7-
+		41- --2 ---
+		-7- --- 6--
+
+		9-- -38 ---
+		--3 -5- ---
+		7-- --- --6
+
+		\(Array<Puzzle>.separator)
+
+		--- --- 2--
+		-2- 8-- -6-
+		--- -9- -7-
+
+		3-- 962 --7
+		75- --- 9--
+		--4 -5- ---
+
+		--- --9 ---
+		--7 --- 341
+		--- -1- 5-2
+		"""
+
+		for puzzle in try Array<Puzzle>(dsl: dsl) {
+			let solved = solve(puzzle)
+			XCTAssertIsSolved(solved)
+		}
+	}
+}
+
+extension Array where Element == Puzzle {
+	static let separator = "-----------"
+	init(dsl: String) throws {
+		self = try dsl
+			.components(separatedBy: Self.separator)
+			.map { $0.trimmingCharacters(in: .whitespaces) }
+			.filter { !$0.isEmpty }
+			.map(Puzzle.init(dsl:))
+	}
+
+	public init(stringLiteral value: StringLiteralType) {
+		try! self.init(dsl: value)
 	}
 }
