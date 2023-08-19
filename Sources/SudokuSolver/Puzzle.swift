@@ -1,5 +1,42 @@
 import Foundation
 
+public enum ContainerType { case row, column, group }
+
+public protocol Container: Sequence {
+	var type: ContainerType { get }
+	var cells: [Cell] { get }
+	var position: Int { get }
+}
+
+extension Container {
+	public func makeIterator() -> IndexingIterator<[Cell]> { cells.makeIterator() }
+	public var underestimatedCount: Int { cells.underestimatedCount }
+	public func withContiguousStorageIfAvailable<R>(_ body: (UnsafeBufferPointer<Cell>) throws -> R) rethrows -> R? {
+		try cells.withContiguousStorageIfAvailable(body)
+	}
+}
+
+public struct Group: Container {
+	public let type = ContainerType.group
+
+	public let cells: [Cell]
+	public let position: Int
+}
+
+public struct Column: Container {
+	public let type = ContainerType.group
+
+	public let cells: [Cell]
+	public let position: Int
+}
+
+public struct Row: Container {
+	public let type = ContainerType.group
+
+	public let cells: [Cell]
+	public let position: Int
+}
+
 public struct Cell: Equatable, CustomStringConvertible, CustomDebugStringConvertible {
 	public var value: Int?
 	public let row: Int
@@ -65,6 +102,7 @@ public struct Puzzle: Equatable {
 
 	public var isSolved: Bool { cells.allSatisfy { $0.hasValue } }
 
+	/// Returns the possible digits that the cell can contain, after removing digits that are present in the contain row, column and group.
 	func candidates(for cell: Cell) -> [Int] {
 		guard !cell.hasValue
 		else { return [] }
@@ -87,8 +125,17 @@ public struct Puzzle: Equatable {
 		return candidates
 	}
 
+	/// Returns the three containers that this cell is a part of.
+	func containers(for cell: Cell) -> [any Container] {
+		return [
+			rows[cell.row - 1],
+			columns[cell.column - 1],
+			groups[cell.group - 1],
+		]
+	}
+
 	/// The cells as represented by columns
-	var columns: [[Cell]] {
+	var columns: [Column] {
 		var columns = [[Cell]](repeating: [Cell](repeating: Cell(value: 0, row: 0, column: 0, group: 0), count: 9), count: 9)
 
 		for column in 0..<9 {
@@ -97,10 +144,10 @@ public struct Puzzle: Equatable {
 			}
 		}
 
-		return columns
+		return columns.map { Column(cells: $0, position: $0[0].column) }
 	}
 
-	var rows: [[Cell]] {
+	var rows: [Row] {
 		var rows = [[Cell]](repeating: [Cell](repeating: Cell(value: 0, row: 0, column: 0, group: 0), count: 9), count: 9)
 
 		for row in 0..<9 {
@@ -109,10 +156,10 @@ public struct Puzzle: Equatable {
 			}
 		}
 
-		return rows
+		return rows.map { Row(cells: $0, position: $0[0].row) }
 	}
 
-	var groups: [[Cell]] {
+	var groups: [Group] {
 		var groups = [[Cell]](repeating: [Cell](repeating: Cell(value: 0, row: 0, column: 0, group: 0), count: 9), count: 9)
 
 		for row in 0..<9 {
@@ -139,7 +186,7 @@ public struct Puzzle: Equatable {
 			}
 		}
 
-		return groups
+		return groups.map { Group(cells: $0, position: $0[0].group) }
 	}
 }
 
