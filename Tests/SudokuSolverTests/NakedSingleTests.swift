@@ -168,12 +168,4 @@ class NakedSingleTests: XCTestCase {
 			"""
 		)
 	}
-
-	static var allTests = [
-		("test__singleValueMissing__addsMissingValue", test__singleValueMissing__addsMissingValue),
-		("test__twoValuesMissing__addsOneMissingValue", test__twoValuesMissing__addsOneMissingValue),
-		("test__multipleItemsMissingInRow_singleItemMissingInColumn__addsInTheMissingColumn", test__multipleItemsMissingInRow_singleItemMissingInColumn__addsInTheMissingColumn),
-		("test__multipleItemsMissingInRowAndColumn_singleItemMissingInGroup__addsInTheMissingGroup", test__multipleItemsMissingInRowAndColumn_singleItemMissingInGroup__addsInTheMissingGroup),
-		("test__singleNakedSingle__solvesThatProblem", test__singleNakedSingle__solvesThatProblem),
-	]
 }

@@ -3,11 +3,11 @@ import XCTest
 import SudokuSolver
 
 func XCTAssertIsSolved(_ puzzle: Puzzle) {
-	XCTAssertTrue(puzzle.isSolved, puzzle.description)
+	XCTAssertIsSolved(puzzle, puzzle.description)
 }
 
 func XCTAssertIsSolved(_ puzzle: Puzzle, _ description: String) {
-	XCTAssertTrue(puzzle.isSolved, description)
+	XCTAssertTrue(puzzle.isSolved, "Puzzle description:\n" + description)
 }
 
 class FullPuzzleSolutionTests: XCTestCase {
@@ -69,9 +69,4 @@ class FullPuzzleSolutionTests: XCTestCase {
 		XCTAssertIsSolved(solved)
 	}
 
-	static let allTests = [
-		("test__solve__puzzleWith4MissingValues", test__solve__puzzleWith4MissingValues),
-		("test__solve__puzzleIsUnsolvable__theSolverReturnsThePuzzleUnsolved", test__solve__puzzleIsUnsolvable__theSolverReturnsThePuzzleUnsolved),
-		("test_solve_puzzleWithNakedSinglesOnly", test_solve_puzzleWithNakedSinglesOnly),
-	]
 }

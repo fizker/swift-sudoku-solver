@@ -463,18 +463,4 @@ class PuzzleTests: XCTestCase {
 
 		XCTAssertEqual(candidates, [8])
 	}
-
-	static let allTests = [
-		("test__initWithCellValues__fullPuzzle__addsCorrectRowAndColumnAndGroupToCells", test__initWithCellValues__fullPuzzle__addsCorrectRowAndColumnAndGroupToCells),
-		("test__columns__fullPuzzle__returnsExpectedCells", test__columns__fullPuzzle__returnsExpectedCells),
-		("test__rows__fullPuzzle__returnsExpectedCells", test__rows__fullPuzzle__returnsExpectedCells),
-		("test__groups__fullPuzzle__returnsExpectedCells", test__groups__fullPuzzle__returnsExpectedCells),
-		("test__isSolved__puzzleIsSolved__returnsTrue", test__isSolved__puzzleIsSolved__returnsTrue),
-		("test__isSolved__puzzleIsNotSolved__returnsFalse", test__isSolved__puzzleIsNotSolved__returnsFalse),
-		("test__initFromDSL__validFormsOfSolvedPuzzle__createsValidPuzzles", test__initFromDSL__validFormsOfSolvedPuzzle__createsValidPuzzles),
-		("test__initFromDSL__validFormsOfUnsolvedPuzzle__createsValidPuzzles", test__initFromDSL__validFormsOfUnsolvedPuzzle__createsValidPuzzles),
-		("test__initFromDSL__cellMissingInRow__throws", test__initFromDSL__cellMissingInRow__throws),
-		("test__initFromDSL__rowMissing__throws", test__initFromDSL__rowMissing__throws),
-		("test__description__puzzleWithEmptyValues__returnsValidValue", test__description__puzzleWithEmptyValues__returnsValidValue),
-	]
 }
