@@ -69,4 +69,25 @@ class FullPuzzleSolutionTests: XCTestCase {
 		XCTAssertIsSolved(solved)
 	}
 
+	func test_solve_puzzleWithTwoHiddenSingles() throws {
+		// G2 has only one option for 9, which should go in R1C6
+		// G7 has only one option for 3, which should go in R8C2
+		let puzzle = try Puzzle(dsl: """
+			-5- 6-- 3--
+			--9 --- ---
+			--- -1- --9
+
+			7-- 4-- 19-
+			--- 8-- ---
+			3-6 --1 -47
+
+			9-- --- -3-
+			--8 -96 --4
+			1-4 38- -7-
+			"""
+		)
+
+		let solved = solve(puzzle)
+		XCTAssertIsSolved(solved)
+	}
 }

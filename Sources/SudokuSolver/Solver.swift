@@ -1,6 +1,7 @@
 public class Solver {
 	private let solvers = [
 		nakedSingle(puzzle:),
+		hiddenSingle(_:),
 	]
 
 	private var puzzle: Puzzle
