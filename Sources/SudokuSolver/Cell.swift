@@ -91,3 +91,25 @@ public struct Cell: Equatable, CustomStringConvertible, CustomDebugStringConvert
 	public var description: String { value?.description ?? "-" }
 	public var debugDescription: String { "\(description) (r\(row)c\(column)g\(group))" }
 }
+
+extension Sequence where Element == Cell {
+	func cell(at coordinate: Coordinate) -> Cell {
+		first { $0.coordinate == coordinate }!
+	}
+
+	func filter(at coordinates: [Coordinate]) -> [Cell] {
+		filter { coordinates.contains($0.coordinate) }
+	}
+
+	func filter(at coordinates: Coordinate...) -> [Cell] {
+		filter(at: coordinates)
+	}
+
+	func filter(notAt coordinates: [Coordinate]) -> [Cell] {
+		filter { !coordinates.contains($0.coordinate) }
+	}
+
+	func filter(notAt coordinates: Coordinate...) -> [Cell] {
+		filter(notAt: coordinates)
+	}
+}
