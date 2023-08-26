@@ -17,7 +17,7 @@ func hiddenSingle(_ puzzle: Puzzle) -> Puzzle {
 			for containerCandidate in containerCandidates where containerCandidate.potentialCount == 1 {
 				if cellCandidates.contains(containerCandidate.value) {
 					cell.value = containerCandidate.value
-					return puzzle.updatingCell(cell)
+					return puzzle.updating(cell)
 				}
 			}
 		}

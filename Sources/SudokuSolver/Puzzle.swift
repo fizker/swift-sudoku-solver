@@ -11,7 +11,7 @@ public struct Puzzle: Equatable {
 	/// ```
 	///
 	/// Any unfilled cell is represented by nil
-	var cells: [Cell]
+	private(set) var cells: [Cell]
 
 	init(cells: [Cell]) throws {
 		self.cells = cells
@@ -38,13 +38,13 @@ public struct Puzzle: Equatable {
 		})
 	}
 
-	func updatingCell(_ cell: Cell) -> Puzzle {
+	func updating(_ cell: Cell) -> Puzzle {
 		var copy = self
-		copy.updateCell(cell)
+		copy.update(cell)
 		return copy
 	}
 
-	mutating func updateCell(_ cell: Cell) {
+	mutating func update(_ cell: Cell) {
 		let rowIndex = cell.row - 1
 		let columnIndex = cell.column - 1
 		let index = rowIndex * 9 + columnIndex
