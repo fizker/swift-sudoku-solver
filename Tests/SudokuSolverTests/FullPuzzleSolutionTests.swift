@@ -2,8 +2,8 @@ import XCTest
 
 import SudokuSolver
 
-func XCTAssertIsSolved(_ puzzle: Puzzle) {
-	XCTAssertTrue(puzzle.isSolved, "Puzzle description:\n" + puzzle.description)
+func XCTAssertIsSolved(_ puzzle: Puzzle, file: StaticString = #filePath, line: UInt = #line) {
+	XCTAssertTrue(puzzle.isSolved, "Puzzle description:\n" + puzzle.description, file: file, line: line)
 }
 
 class FullPuzzleSolutionTests: XCTestCase {
