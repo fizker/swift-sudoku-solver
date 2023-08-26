@@ -40,23 +40,33 @@ public struct Coordinate: Equatable {
 	var column: Int
 	var group: Int
 
-	init(row: Int, column: Int, group: Int) {
+	enum Error: Swift.Error {
+		case invalidRow, invalidColumn, invalidGroup
+	}
+
+	init(row: Int, column: Int, group: Int) throws {
+		guard 1 <= row && row <= 9
+		else { throw Error.invalidRow }
+		guard 1 <= column && column <= 9
+		else { throw Error.invalidColumn }
+		guard 1 <= group && group <= 9
+		else { throw Error.invalidGroup }
+
 		self.row = row
 		self.column = column
 		self.group = group
 	}
 
-	init(row: Int, column: Int) {
-		self.row = row
-		self.column = column
-
+	init(row: Int, column: Int) throws {
 		// This is now 0 for 1-3, 3 for 4-6, 6 for 7-9
 		let rg = (row-1) / 3 * 3
 
 		// This is now 0 for 1-3, 1 for 4-6, 2 for 7-9
 		let cg = (column-1) / 3
 
-		self.group = cg + 1 + rg
+		let group = cg + 1 + rg
+
+		try self.init(row: row, column: column, group: group)
 	}
 }
 
@@ -66,7 +76,7 @@ public struct Cell: Equatable, CustomStringConvertible, CustomDebugStringConvert
 	public let column: Int
 	public let group: Int
 	public var coordinate: Coordinate {
-		.init(row: row, column: column, group: group)
+		try! .init(row: row, column: column, group: group)
 	}
 
 	init(value: Int? = nil, row: Int, column: Int, group: Int) {
