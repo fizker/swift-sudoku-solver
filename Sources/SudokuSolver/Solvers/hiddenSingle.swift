@@ -7,8 +7,7 @@ func hiddenSingle(_ puzzle: Puzzle) -> Puzzle {
 			var containerCandidates = [1,2,3,4,5,6,7,8,9].map { (value: $0, potentialCount: 0) }
 
 			for cell in container.cells {
-				let cellCandidates = puzzle.candidates(for: cell)
-				for value in cellCandidates {
+				for value in cell.pencilMarks {
 					let index = value - 1
 					containerCandidates[index].potentialCount += 1
 				}
@@ -17,7 +16,7 @@ func hiddenSingle(_ puzzle: Puzzle) -> Puzzle {
 			for containerCandidate in containerCandidates where containerCandidate.potentialCount == 1 {
 				if cellCandidates.contains(containerCandidate.value) {
 					cell.value = containerCandidate.value
-					return puzzle.updatingCell(cell)
+					return puzzle.updating(cell)
 				}
 			}
 		}

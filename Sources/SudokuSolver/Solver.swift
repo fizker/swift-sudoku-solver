@@ -11,6 +11,8 @@ public class Solver {
 	}
 
 	public func solve() -> Puzzle {
+		puzzle.pencilMarkKnownValues()
+
 		runloop: while !puzzle.isSolved {
 			solverloop: for solver in solvers {
 				let s = solver(puzzle)

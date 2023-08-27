@@ -1,54 +1,5 @@
 import Foundation
 
-public enum ContainerType { case row, column, group }
-
-public protocol Container: Sequence {
-	var type: ContainerType { get }
-	var cells: [Cell] { get }
-	var position: Int { get }
-}
-
-extension Container {
-	public func makeIterator() -> IndexingIterator<[Cell]> { cells.makeIterator() }
-	public var underestimatedCount: Int { cells.underestimatedCount }
-	public func withContiguousStorageIfAvailable<R>(_ body: (UnsafeBufferPointer<Cell>) throws -> R) rethrows -> R? {
-		try cells.withContiguousStorageIfAvailable(body)
-	}
-}
-
-public struct Group: Container {
-	public let type = ContainerType.group
-
-	public let cells: [Cell]
-	public let position: Int
-}
-
-public struct Column: Container {
-	public let type = ContainerType.group
-
-	public let cells: [Cell]
-	public let position: Int
-}
-
-public struct Row: Container {
-	public let type = ContainerType.group
-
-	public let cells: [Cell]
-	public let position: Int
-}
-
-public struct Cell: Equatable, CustomStringConvertible, CustomDebugStringConvertible {
-	public var value: Int?
-	public let row: Int
-	public let column: Int
-	public let group: Int
-
-	public var hasValue: Bool { value != nil }
-
-	public var description: String { value?.description ?? "-" }
-	public var debugDescription: String { "\(description) (r\(row)c\(column)g\(group)" }
-}
-
 public struct Puzzle: Equatable {
 	/// Cells for a standard 9x9 puzzle match the array like so:
 	/// ```
@@ -60,10 +11,24 @@ public struct Puzzle: Equatable {
 	/// ```
 	///
 	/// Any unfilled cell is represented by nil
-	var cells: [Cell]
+	private(set) var cells: [Cell]
 
 	init(cells: [Cell]) throws {
 		self.cells = cells
+	}
+
+	mutating func pencilMarkKnownValues() {
+		for var cell in cells {
+			guard !cell.hasValue
+			else { continue }
+
+			let candidates = candidates(for: cell)
+
+			for pencilMark in cell.pencilMarks where !candidates.contains(pencilMark) {
+				cell.pencilMarks.remove(pencilMark)
+				update(cell)
+			}
+		}
 	}
 
 	/// Default constructor. Throws if the given cells are not in a legal constellation
@@ -87,13 +52,13 @@ public struct Puzzle: Equatable {
 		})
 	}
 
-	func updatingCell(_ cell: Cell) -> Puzzle {
+	func updating(_ cell: Cell) -> Puzzle {
 		var copy = self
-		copy.updateCell(cell)
+		copy.update(cell)
 		return copy
 	}
 
-	mutating func updateCell(_ cell: Cell) {
+	mutating func update(_ cell: Cell) {
 		let rowIndex = cell.row - 1
 		let columnIndex = cell.column - 1
 		let index = rowIndex * 9 + columnIndex

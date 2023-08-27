@@ -5,7 +5,7 @@ class NakedSingleTests: XCTestCase {
 	let solve = nakedSingle(puzzle:)
 
 	func test__singleValueMissing__addsMissingValue() throws {
-		let puzzle = try Puzzle(dsl: """
+		var puzzle = try Puzzle(dsl: """
 			8-1 764 259
 			695 281 374
 			472 593 861
@@ -19,6 +19,7 @@ class NakedSingleTests: XCTestCase {
 			329 648 715
 			"""
 		)
+		puzzle.pencilMarkKnownValues()
 
 		let solved = solve(puzzle)
 
@@ -39,7 +40,7 @@ class NakedSingleTests: XCTestCase {
 	}
 
 	func test__twoValuesMissing__addsOneMissingValue() throws {
-		let puzzle = try Puzzle(dsl: """
+		var puzzle = try Puzzle(dsl: """
 			8-1 764 259
 			695 281 374
 			472 593 86-
@@ -53,6 +54,7 @@ class NakedSingleTests: XCTestCase {
 			329 648 715
 			"""
 		)
+		puzzle.pencilMarkKnownValues()
 
 		let solved = solve(puzzle)
 
@@ -73,7 +75,7 @@ class NakedSingleTests: XCTestCase {
 	}
 
 	func test__multipleItemsMissingInRow_singleItemMissingInColumn__addsInTheMissingColumn() throws {
-		let puzzle = try Puzzle(dsl: """
+		var puzzle = try Puzzle(dsl: """
 		831 764 259
 		695 281 374
 		-72 5-3 861
@@ -86,6 +88,7 @@ class NakedSingleTests: XCTestCase {
 		514 372 986
 		329 648 715
 		""")
+		puzzle.pencilMarkKnownValues()
 
 		let solved = solve(puzzle)
 
@@ -105,7 +108,7 @@ class NakedSingleTests: XCTestCase {
 	}
 
 	func test__multipleItemsMissingInRowAndColumn_singleItemMissingInGroup__addsInTheMissingGroup() throws {
-		let puzzle = try Puzzle(dsl: """
+		var puzzle = try Puzzle(dsl: """
 		831 764 259
 		695 281 374
 		-72 5-3 861
@@ -118,6 +121,7 @@ class NakedSingleTests: XCTestCase {
 		514 372 986
 		329 648 715
 		""")
+		puzzle.pencilMarkKnownValues()
 
 		let solved = solve(puzzle)
 
@@ -137,7 +141,7 @@ class NakedSingleTests: XCTestCase {
 	}
 
 	func test__singleNakedSingle__solvesThatProblem() throws {
-		let puzzle = try Puzzle(dsl: """
+		var puzzle = try Puzzle(dsl: """
 			5-- 139 ---
 			-21 -87 --9
 			-98 -4- 5--
@@ -151,6 +155,7 @@ class NakedSingleTests: XCTestCase {
 			7-2 --- --8
 			"""
 		)
+		puzzle.pencilMarkKnownValues()
 
 		let solved = solve(puzzle)
 		XCTAssertEqual(solved.description, """

@@ -3,7 +3,7 @@ import XCTest
 
 class HiddenSingleTests: XCTestCase {
 	func test__singleNakedSingle__fillsInMissingNumber() throws {
-		let puzzle = try Puzzle(dsl: """
+		var puzzle = try Puzzle(dsl: """
 			831 764 259
 			695 281 374
 			472 593 861
@@ -17,13 +17,14 @@ class HiddenSingleTests: XCTestCase {
 			329 648 715
 			"""
 		)
+		puzzle.pencilMarkKnownValues()
 
 		let solved = hiddenSingle(puzzle)
 		XCTAssertIsSolved(solved)
 	}
 
 	func test__containsOneHiddenSingles__fillsInHiddenSingle() async throws {
-		let puzzle = try Puzzle(dsl: """
+		var puzzle = try Puzzle(dsl: """
 			-5- 6-- 3--
 			--9 --- ---
 			--- -1- --9
@@ -37,6 +38,7 @@ class HiddenSingleTests: XCTestCase {
 			1-4 38- -7-
 			"""
 		)
+		puzzle.pencilMarkKnownValues()
 
 		let solved = hiddenSingle(puzzle)
 		XCTAssertEqual(solved.description, """
@@ -56,7 +58,7 @@ class HiddenSingleTests: XCTestCase {
 	}
 
 	func test__containsMultipleHiddenSingles__addsFirstHiddenSingle() async throws {
-		let puzzle = try Puzzle(dsl: """
+		var puzzle = try Puzzle(dsl: """
 			-5- 6-- 3--
 			--9 --- ---
 			--- -1- --9
@@ -70,6 +72,7 @@ class HiddenSingleTests: XCTestCase {
 			1-4 38- -7-
 			"""
 		)
+		puzzle.pencilMarkKnownValues()
 
 		let solved = hiddenSingle(puzzle)
 		XCTAssertEqual(solved.description, """

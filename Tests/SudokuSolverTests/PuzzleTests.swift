@@ -463,4 +463,156 @@ class PuzzleTests: XCTestCase {
 
 		XCTAssertEqual(candidates, [8])
 	}
+
+	func test__pencilMarkKnownValues__singleValueMissing__updatesPencilMark() throws {
+		var puzzle = try Puzzle(dsl: """
+			8-1 764 259
+			695 281 374
+			472 593 861
+
+			153 829 647
+			987 456 132
+			246 137 598
+
+			768 915 423
+			514 372 986
+			329 648 715
+			"""
+		)
+
+		let coordinate = try Coordinate(row: 1, column: 2)
+
+		for cell in puzzle.cells.filter(notAt: coordinate) {
+			XCTAssertEqual(cell.pencilMarks, [], cell.debugDescription)
+		}
+
+		XCTAssertEqual(puzzle.cells.cell(at: coordinate).pencilMarks, [1,2,3,4,5,6,7,8,9])
+
+		puzzle.pencilMarkKnownValues()
+
+		for cell in puzzle.cells.filter(notAt: coordinate) {
+			XCTAssertEqual(cell.pencilMarks, [], cell.debugDescription)
+		}
+
+		XCTAssertEqual(puzzle.cells.cell(at: coordinate).pencilMarks, [3])
+	}
+
+	func test__pencilMarkKnownValues__twoValuesMissing__updatesPencilMarks() throws {
+		var puzzle = try Puzzle(dsl: """
+			8-1 764 259
+			695 281 374
+			472 593 86-
+
+			153 829 647
+			987 456 132
+			246 137 598
+
+			768 915 423
+			514 372 986
+			329 648 715
+			"""
+		)
+
+		let coordinates = try [
+			Coordinate(row: 1, column: 2),
+			.init(row: 3, column: 9),
+		]
+
+		for cell in puzzle.cells.filter(notAt: coordinates) {
+			XCTAssertEqual(cell.pencilMarks, [], cell.debugDescription)
+		}
+
+		for cell in puzzle.cells.filter(at: coordinates) {
+			XCTAssertEqual(cell.pencilMarks, [1,2,3,4,5,6,7,8,9])
+		}
+
+		puzzle.pencilMarkKnownValues()
+
+		for cell in puzzle.cells.filter(notAt: coordinates) {
+			XCTAssertEqual(cell.pencilMarks, [], cell.debugDescription)
+		}
+
+		XCTAssertEqual(puzzle.cells.cell(at: coordinates[0]).pencilMarks, [3])
+		XCTAssertEqual(puzzle.cells.cell(at: coordinates[1]).pencilMarks, [1])
+	}
+
+	func test__pencilMarkKnownValues__multipleItemsMissingInRow_singleItemMissingInColumn__updatesPencilMarks() throws {
+		var puzzle = try Puzzle(dsl: """
+			831 764 259
+			695 281 374
+			-72 5-3 861
+
+			153 829 647
+			987 456 132
+			246 137 598
+
+			768 915 423
+			514 372 986
+			329 648 715
+			"""
+		)
+		let coordinates = try [
+			Coordinate(row: 3, column: 1),
+			.init(row: 3, column: 5),
+		]
+
+		for cell in puzzle.cells.filter(notAt: coordinates) {
+			XCTAssertEqual(cell.pencilMarks, [], cell.debugDescription)
+		}
+
+		for cell in puzzle.cells.filter(at: coordinates) {
+			XCTAssertEqual(cell.pencilMarks, [1,2,3,4,5,6,7,8,9])
+		}
+
+		puzzle.pencilMarkKnownValues()
+
+		for cell in puzzle.cells.filter(notAt: coordinates) {
+			XCTAssertEqual(cell.pencilMarks, [], cell.debugDescription)
+		}
+
+		XCTAssertEqual(puzzle.cells.cell(at: coordinates[0]).pencilMarks, [4])
+		XCTAssertEqual(puzzle.cells.cell(at: coordinates[1]).pencilMarks, [9])
+	}
+
+	func test__pencilMarkKnownValues__multipleItemsMissingInRowAndColumn_singleItemMissingInGroup__updatesPencilMarks() throws {
+		var puzzle = try Puzzle(dsl: """
+			831 764 259
+			695 281 374
+			-72 5-3 861
+
+			153 829 647
+			-87 4-6 132
+			246 137 598
+
+			768 915 423
+			514 372 986
+			329 648 715
+			"""
+		)
+		let coordinates = try [
+			Coordinate(row: 3, column: 1),
+			.init(row: 3, column: 5),
+			.init(row: 5, column: 1),
+			.init(row: 5, column: 5),
+		]
+
+		for cell in puzzle.cells.filter(notAt: coordinates) {
+			XCTAssertEqual(cell.pencilMarks, [], cell.debugDescription)
+		}
+
+		for cell in puzzle.cells.filter(at: coordinates) {
+			XCTAssertEqual(cell.pencilMarks, [1,2,3,4,5,6,7,8,9])
+		}
+
+		puzzle.pencilMarkKnownValues()
+
+		for cell in puzzle.cells.filter(notAt: coordinates) {
+			XCTAssertEqual(cell.pencilMarks, [], cell.debugDescription)
+		}
+
+		XCTAssertEqual(puzzle.cells.cell(at: coordinates[0]).pencilMarks, [4])
+		XCTAssertEqual(puzzle.cells.cell(at: coordinates[1]).pencilMarks, [9])
+		XCTAssertEqual(puzzle.cells.cell(at: coordinates[2]).pencilMarks, [9])
+		XCTAssertEqual(puzzle.cells.cell(at: coordinates[3]).pencilMarks, [5])
+	}
 }
