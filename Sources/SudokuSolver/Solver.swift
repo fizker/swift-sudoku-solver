@@ -1,7 +1,13 @@
+protocol Algorithm {
+	var name: String { get }
+
+	func callAsFunction(_: Puzzle) -> Puzzle
+}
+
 public class Solver {
-	private let solvers = [
-		nakedSingle(puzzle:),
-		hiddenSingle(_:),
+	private let algorithms: [Algorithm] = [
+		NakedSingle(),
+		HiddenSingle(),
 	]
 
 	private var puzzle: Puzzle
@@ -14,8 +20,8 @@ public class Solver {
 		puzzle.pencilMarkKnownValues()
 
 		runloop: while !puzzle.isSolved {
-			solverloop: for solver in solvers {
-				let s = solver(puzzle)
+			solverloop: for algorithm in algorithms {
+				let s = algorithm(puzzle)
 				if s != puzzle {
 					puzzle = s
 					continue runloop

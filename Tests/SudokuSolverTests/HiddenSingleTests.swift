@@ -2,6 +2,8 @@ import XCTest
 @testable import SudokuSolver
 
 class HiddenSingleTests: XCTestCase {
+	let hiddenSingle = HiddenSingle()
+
 	func test__singleNakedSingle__fillsInMissingNumber() throws {
 		var puzzle = try Puzzle(dsl: """
 			831 764 259

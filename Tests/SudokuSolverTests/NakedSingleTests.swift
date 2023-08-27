@@ -2,7 +2,7 @@ import XCTest
 @testable import SudokuSolver
 
 class NakedSingleTests: XCTestCase {
-	let solve = nakedSingle(puzzle:)
+	let solve = NakedSingle()
 
 	func test__singleValueMissing__addsMissingValue() throws {
 		var puzzle = try Puzzle(dsl: """
