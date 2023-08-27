@@ -17,6 +17,20 @@ public struct Puzzle: Equatable {
 		self.cells = cells
 	}
 
+	mutating func pencilMarkKnownValues() {
+		for var cell in cells {
+			guard !cell.hasValue
+			else { continue }
+
+			let candidates = candidates(for: cell)
+
+			for pencilMark in cell.pencilMarks where !candidates.contains(pencilMark) {
+				cell.pencilMarks.remove(pencilMark)
+				update(cell)
+			}
+		}
+	}
+
 	/// Default constructor. Throws if the given cells are not in a legal constellation
 	public init(cellValues: [Int?]) throws {
 		var row = 1

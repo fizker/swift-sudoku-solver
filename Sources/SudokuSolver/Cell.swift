@@ -71,10 +71,17 @@ public struct Coordinate: Equatable {
 }
 
 public struct Cell: Equatable, CustomStringConvertible, CustomDebugStringConvertible {
-	public var value: Int?
+	public var value: Int? {
+		didSet {
+			if value != nil {
+				pencilMarks = []
+			}
+		}
+	}
 	public let row: Int
 	public let column: Int
 	public let group: Int
+	public var pencilMarks: Set<Int>
 	public var coordinate: Coordinate {
 		try! .init(row: row, column: column, group: group)
 	}
@@ -84,6 +91,7 @@ public struct Cell: Equatable, CustomStringConvertible, CustomDebugStringConvert
 		self.row = row
 		self.column = column
 		self.group = group
+		self.pencilMarks = value == nil ? [1,2,3,4,5,6,7,8,9] : []
 	}
 
 	public var hasValue: Bool { value != nil }
