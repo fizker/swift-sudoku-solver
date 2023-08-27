@@ -62,7 +62,19 @@ public struct Puzzle: Equatable {
 		let rowIndex = cell.row - 1
 		let columnIndex = cell.column - 1
 		let index = rowIndex * 9 + columnIndex
+
+		let isValueUpdated = cells[index].value != cell.value
 		cells[index] = cell
+
+		if isValueUpdated, let value = cell.value {
+			// Recalculate the affected pencil marks
+			for container in containers(for: cell) {
+				for var otherCell in container.cells {
+					otherCell.pencilMarks.remove(value)
+					update(otherCell)
+				}
+			}
+		}
 	}
 
 	public var isSolved: Bool { cells.allSatisfy { $0.hasValue } }
