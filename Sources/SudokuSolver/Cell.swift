@@ -97,7 +97,9 @@ public struct Cell: Equatable, CustomStringConvertible, CustomDebugStringConvert
 	public var hasValue: Bool { value != nil }
 
 	public var description: String { value?.description ?? "-" }
-	public var debugDescription: String { "\(description) (r\(row)c\(column)g\(group))" }
+	public var debugDescription: String {
+		"\(description) (r\(row)c\(column)g\(group)) P:[\(pencilMarks)]"
+	}
 }
 
 extension Sequence where Element == Cell {
