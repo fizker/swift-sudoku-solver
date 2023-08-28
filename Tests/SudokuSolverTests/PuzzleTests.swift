@@ -1,3 +1,4 @@
+import FzkExtensions
 import XCTest
 @testable import SudokuSolver
 
@@ -462,6 +463,72 @@ class PuzzleTests: XCTestCase {
 		let candidates = puzzle.candidates(for: cell)
 
 		XCTAssertEqual(candidates, [8])
+	}
+
+	func test__cellsPointingAt__twoCellsGiven_groupIsShared_rowIsNotShared_colIsNotShared__returnsOtherCellsInGroup() async throws {
+		let puzzle = Puzzle()
+
+		let cells = try puzzle.cells.filter(at: [
+			.init(row: 1, column: 1),
+			.init(row: 2, column: 2),
+		])
+
+		let actual = puzzle.cells(pointingAt: cells)
+
+		XCTAssertEqual(actual.count, 7)
+		XCTAssertEqual(actual.map(\.group) |> Set.init, [1])
+	}
+
+	func test__cellsPointingAt__twoCellsGiven_groupIsShared_rowIsShared_colIsNotShared__returnsOtherCellsInGroupAndRow() async throws {
+		let puzzle = Puzzle()
+
+		let cells = try puzzle.cells.filter(at: [
+			.init(row: 1, column: 1),
+			.init(row: 1, column: 2),
+		])
+
+		let actual = puzzle.cells(pointingAt: cells)
+
+		XCTAssertEqual(actual.count, 13)
+		XCTAssertTrue(actual.allSatisfy({
+			$0.group == 1 || $0.row == 1
+		}))
+	}
+
+	func test__cellsPointingAt__twoCellsGiven_groupIsNotShared_rowIsNotShared_colIsNotShared__returnsPointingCells() async throws {
+		let puzzle = Puzzle()
+
+		let cells = try puzzle.cells.filter(at: [
+			.init(row: 1, column: 1),
+			.init(row: 4, column: 5),
+		])
+
+		let actual = puzzle.cells(pointingAt: cells)
+
+		XCTAssertEqual(actual, try puzzle.cells.filter(at: [
+			.init(row: 1, column: 5),
+			.init(row: 4, column: 1),
+		]))
+	}
+
+	func test__cellsPointingAt__twoCellsGiven_groupIsNotShared_rowIsNotShared_colIsNotShared_groupsShareColumn__returnsPointingCells() async throws {
+		let puzzle = Puzzle()
+
+		let cells = try puzzle.cells.filter(at: [
+			.init(row: 1, column: 1),
+			.init(row: 4, column: 3),
+		])
+
+		let actual = puzzle.cells(pointingAt: cells)
+
+		XCTAssertEqual(actual, try puzzle.cells.filter(at: [
+			.init(row: 1, column: 3),
+			.init(row: 2, column: 3),
+			.init(row: 3, column: 3),
+			.init(row: 4, column: 1),
+			.init(row: 5, column: 1),
+			.init(row: 6, column: 1),
+		]))
 	}
 
 	func test__pencilMarkKnownValues__singleValueMissing__updatesPencilMark() throws {

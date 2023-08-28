@@ -86,6 +86,10 @@ public struct Cell: Equatable, CustomStringConvertible, CustomDebugStringConvert
 		try! .init(row: row, column: column, group: group)
 	}
 
+	init(value: Int? = nil, coordinate: Coordinate) {
+		self.init(value: value, row: coordinate.row, column: coordinate.column, group: coordinate.group)
+	}
+
 	init(value: Int? = nil, row: Int, column: Int, group: Int) {
 		self.value = value
 		self.row = row

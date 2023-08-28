@@ -31,6 +31,10 @@ public struct Puzzle: Equatable {
 		}
 	}
 
+	public init() {
+		try! self.init(cellValues: .init(repeating: nil, count: 81))
+	}
+
 	/// Default constructor. Throws if the given cells are not in a legal constellation
 	public init(cellValues: [Int?]) throws {
 		var row = 1
@@ -40,15 +44,10 @@ public struct Puzzle: Equatable {
 			if column == 9 {
 				column = 0
 				row += 1
-				// The `x / 3 * 3` does a thing, because we are in Int-land;
-				// the calculation is not lossless
-				rg = (row-1) / 3 * 3
 			}
 			column += 1
 
-			let groupIndex = rg + (column-1) / 3
-
-			return Cell(value: $0, row: row, column: column, group: groupIndex + 1)
+			return try Cell(value: $0, coordinate: .init(row: row, column: column))
 		})
 	}
 
@@ -122,6 +121,22 @@ public struct Puzzle: Equatable {
 			columns[cell.column - 1],
 			groups[cell.group - 1],
 		]
+	}
+
+	/// Returns all cells that are pointing at the given cells.
+	///
+	/// `O(n*2m)` where `n` is `puzzle.cells.count` and `m` is the number of cells passed in.
+	func cells(pointingAt cells: [Cell]) -> [Cell] {
+		self.cells.filter { cell in
+			guard !cells.contains(cell)
+			else { return false }
+
+			return cells.allSatisfy {
+				cell.row == $0.row ||
+				cell.column == $0.column ||
+				cell.group == $0.group
+			}
+		}
 	}
 
 	/// The cells as represented by columns
