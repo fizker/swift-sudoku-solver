@@ -4,7 +4,7 @@ struct HiddenSingle: Algorithm {
 
 	func callAsFunction(_ puzzle: Puzzle) -> Puzzle {
 		for var cell in puzzle.cells where !cell.hasValue {
-			let cellCandidates = puzzle.candidates(for: cell)
+			let cellCandidates = cell.pencilMarks
 
 			for container in puzzle.containers(for: cell) {
 				let containerCandidates = puzzle.candidateCount(for: container)
