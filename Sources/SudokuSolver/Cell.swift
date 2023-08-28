@@ -22,14 +22,14 @@ public struct Group: Container {
 }
 
 public struct Column: Container {
-	public let type = ContainerType.group
+	public let type = ContainerType.column
 
 	public let cells: [Cell]
 	public let position: Int
 }
 
 public struct Row: Container {
-	public let type = ContainerType.group
+	public let type = ContainerType.row
 
 	public let cells: [Cell]
 	public let position: Int
