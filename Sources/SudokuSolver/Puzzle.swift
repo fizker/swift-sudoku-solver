@@ -40,15 +40,10 @@ public struct Puzzle: Equatable {
 			if column == 9 {
 				column = 0
 				row += 1
-				// The `x / 3 * 3` does a thing, because we are in Int-land;
-				// the calculation is not lossless
-				rg = (row-1) / 3 * 3
 			}
 			column += 1
 
-			let groupIndex = rg + (column-1) / 3
-
-			return Cell(value: $0, row: row, column: column, group: groupIndex + 1)
+			return try Cell(value: $0, coordinate: .init(row: row, column: column))
 		})
 	}
 
