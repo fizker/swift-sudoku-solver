@@ -178,6 +178,14 @@ public struct Puzzle: Equatable {
 
 		return groups.map { Group(cells: $0, position: $0[0].group) }
 	}
+
+	var containers: [any Container] {
+		let r = rows.map { $0 as (any Container) }
+		let c = columns.map { $0 as (any Container) }
+		let g = groups.map { $0 as (any Container) }
+
+		return r + c + g
+	}
 }
 
 extension Puzzle: CustomStringConvertible {

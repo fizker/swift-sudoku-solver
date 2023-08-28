@@ -116,6 +116,26 @@ class FullPuzzleSolutionTests: XCTestCase {
 			XCTAssertIsSolved(solved)
 		}
 	}
+
+	func test__puzzleWithHiddenPairs__puzzleIsSolved() async throws {
+		let puzzle = try Puzzle(dsl: """
+		-9- -5- ---
+		-3- --- --1
+		--- 21- -34
+
+		5-- 89- ---
+		1-- -2- --9
+		-2- -46 ---
+
+		-1- -35 --2
+		8-- --- -5-
+		4-- --- -1-
+		"""
+		)
+
+		let solved = solve(puzzle)
+		XCTAssertIsSolved(solved)
+	}
 }
 
 extension Array where Element == Puzzle {

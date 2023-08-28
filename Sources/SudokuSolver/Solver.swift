@@ -8,6 +8,7 @@ public class Solver {
 	private let algorithms: [Algorithm] = [
 		NakedSingle(),
 		HiddenSingle(),
+		HiddenPair(),
 	]
 
 	private var puzzle: Puzzle
