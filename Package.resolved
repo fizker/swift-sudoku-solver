@@ -1,0 +1,14 @@
+{
+  "pins" : [
+    {
+      "identity" : "swift-extensions",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/fizker/swift-extensions.git",
+      "state" : {
+        "revision" : "3854d406445822eeed037b49c5afbd30eea1cfd6",
+        "version" : "1.2.0"
+      }
+    }
+  ],
+  "version" : 2
+}

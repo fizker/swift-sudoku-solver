@@ -12,11 +12,14 @@ let package = Package(
 		),
 	],
 	dependencies: [
+		.package(url: "https://github.com/fizker/swift-extensions.git", from:"1.2.0"),
 	],
 	targets: [
 		.target(
 			name: "SudokuSolver",
-			dependencies: []
+			dependencies: [
+				.product(name: "FzkExtensions", package: "swift-extensions"),
+			]
 		),
 		.testTarget(
 			name: "SudokuSolverTests",
