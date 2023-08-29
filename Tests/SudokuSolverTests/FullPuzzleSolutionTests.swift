@@ -111,7 +111,7 @@ class FullPuzzleSolutionTests: XCTestCase {
 		--- -1- 5-2
 		"""
 
-		for puzzle in try Array<Puzzle>(dsl: dsl) {
+		for puzzle in try parse(dsl) {
 			let solved = solve(puzzle)
 			XCTAssertIsSolved(solved)
 		}
@@ -135,6 +135,14 @@ class FullPuzzleSolutionTests: XCTestCase {
 
 		let solved = solve(puzzle)
 		XCTAssertIsSolved(solved)
+	}
+}
+
+extension FullPuzzleSolutionTests {
+	var separator: String { Array<Puzzle>.separator }
+
+	func parse(_ dsl: String) throws -> Array<Puzzle> {
+		try .init(dsl: dsl)
 	}
 }
 
