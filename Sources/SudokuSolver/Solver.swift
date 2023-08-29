@@ -1,7 +1,13 @@
 protocol Algorithm {
-	var name: String { get }
+	static var name: String { get }
 
-	func callAsFunction(_: Puzzle) -> Puzzle
+	init()
+
+	func callAsFunction(_ puzzle: Puzzle) -> Puzzle
+}
+
+extension Algorithm {
+	var name: String { Self.name }
 }
 
 public class Solver {

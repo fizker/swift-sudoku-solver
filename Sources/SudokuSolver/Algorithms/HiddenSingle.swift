@@ -1,6 +1,6 @@
 /// A hidden single is where only one cell in a column, row or group can contain a specific digit.
 struct HiddenSingle: Algorithm {
-	let name = "Hidden single"
+	static let name = "Hidden single"
 
 	func callAsFunction(_ puzzle: Puzzle) -> Puzzle {
 		for var cell in puzzle.cells where !cell.hasValue {

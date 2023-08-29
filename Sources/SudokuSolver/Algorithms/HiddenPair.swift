@@ -1,6 +1,6 @@
 /// A naked pair is if two numbers can only exist twice in a container, and they only exist in the same two cells.
 struct HiddenPair: Algorithm {
-	let name = "Hidden pair"
+	static let name = "Hidden pair"
 
 	func callAsFunction(_ puzzle: Puzzle) -> Puzzle {
 		for container in puzzle.containers {

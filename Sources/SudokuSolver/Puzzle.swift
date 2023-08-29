@@ -39,7 +39,6 @@ public struct Puzzle: Equatable {
 	public init(cellValues: [Int?]) throws {
 		var row = 1
 		var column = 0
-		var rg = 0
 		try self.init(cells: cellValues.map {
 			if column == 9 {
 				column = 0
