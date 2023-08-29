@@ -136,6 +136,26 @@ class FullPuzzleSolutionTests: XCTestCase {
 		let solved = solve(puzzle)
 		XCTAssertIsSolved(solved)
 	}
+
+	func test__puzzleWithPointingPair__puzzleIsSolved() async throws {
+		let puzzle = try Puzzle(dsl: """
+			-7- --2 ---
+			--8 --1 -69
+			6-4 --- ---
+
+			--- -1- --2
+			-1- 5-7 -3-
+			--- 8-- --1
+
+			4-- --8 --7
+			--- -7- -1-
+			--5 --- 94-
+			"""
+		)
+
+		let solved = solve(puzzle)
+		XCTAssertIsSolved(solved)
+	}
 }
 
 extension FullPuzzleSolutionTests {
