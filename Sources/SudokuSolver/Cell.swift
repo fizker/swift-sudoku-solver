@@ -1,9 +1,17 @@
 public enum ContainerType { case row, column, group }
 
-public protocol Container: Sequence {
+public protocol Container: Sequence, Equatable {
 	var type: ContainerType { get }
 	var cells: [Cell] { get }
 	var position: Int { get }
+}
+
+func ==(lhs: any Container, rhs: any Container) -> Bool {
+	lhs.type == rhs.type && lhs.position == rhs.position && lhs.cells == rhs.cells
+}
+// We have to manually make this since we implement via `any` keyword
+func !=(lhs: any Container, rhs: any Container) -> Bool {
+	!(lhs == rhs)
 }
 
 extension Container {
