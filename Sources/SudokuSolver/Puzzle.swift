@@ -15,13 +15,17 @@ public struct Puzzle: Equatable {
 	/// ```
 	///
 	/// Any unfilled cell is represented by nil
-	private(set) var cells: [Cell]
+	private(set) public var cells: [Cell]
 
-	init(cells: [Cell]) throws {
+	/// Creates a new Puzzle with the given cells.
+	///
+	/// - parameter cells: The cells of the puzzle.
+	public init(cells: [Cell]) throws {
 		self.cells = cells
 	}
 
-	mutating func pencilMarkKnownValues() {
+	/// Resets the pencil marks of all cells to only what can be derived from the current values of the cells.
+	public mutating func pencilMarkKnownValues() {
 		for var cell in cells {
 			guard !cell.hasValue
 			else { continue }
@@ -40,6 +44,8 @@ public struct Puzzle: Equatable {
 	}
 
 	/// Default constructor. Throws if the given cells are not in a legal constellation
+	///
+	/// - parameter cellValues: The values of the cells, or `nil` if the cell should be empty. The cells are filled starting at row 1 column 1, filling out the rows first and then the columns.
 	public init(cellValues: [Int?]) throws {
 		var row = 1
 		var column = 0
@@ -54,12 +60,23 @@ public struct Puzzle: Equatable {
 		})
 	}
 
+	/// Returns a copy of the puzzle updated with the given cell.
+	///
+	/// If the cell have a value, the pencil marks of any cell that it points at will be updated acoordingly.
+	///
+	/// - parameter cell: The cell to update.
+	/// - returns: A copy of the puzzle with the updated cell.
 	func updating(_ cell: Cell) -> Puzzle {
 		var copy = self
 		copy.update(cell)
 		return copy
 	}
 
+	/// Updates the puzzle with the given cell.
+	///
+	/// If the cell have a value, the pencil marks of any cell that it points at will be updated acoordingly.
+	///
+	/// - parameter cell: The cell to update.
 	mutating func update(_ cell: Cell) {
 		let rowIndex = cell.row - 1
 		let columnIndex = cell.column - 1
@@ -79,7 +96,8 @@ public struct Puzzle: Equatable {
 		}
 	}
 
-	public var isSolved: Bool { cells.allSatisfy { $0.hasValue } }
+	/// Checks if the puzzle is currently solved. It is considered solved if all cells have a value.
+	public var isSolved: Bool { cells.allSatisfy(\.hasValue) }
 
 	/// Returns the possible digits that the cell can contain, after removing digits that are present in the contain row, column and group.
 	func candidates(for cell: Cell) -> [Int] {
@@ -142,8 +160,8 @@ public struct Puzzle: Equatable {
 		}
 	}
 
-	/// The cells as represented by columns
-	var columns: [Column] {
+	/// The columns of the puzzle.
+	public var columns: [Column] {
 		var columns = [[Cell]](repeating: [Cell](repeating: Cell(value: 0, row: 0, column: 0, group: 0), count: 9), count: 9)
 
 		for column in 0..<9 {
@@ -155,7 +173,8 @@ public struct Puzzle: Equatable {
 		return columns.map { Column(cells: $0, position: $0[0].column) }
 	}
 
-	var rows: [Row] {
+	/// The rows of the puzzle.
+	public var rows: [Row] {
 		var rows = [[Cell]](repeating: [Cell](repeating: Cell(value: 0, row: 0, column: 0, group: 0), count: 9), count: 9)
 
 		for row in 0..<9 {
@@ -167,7 +186,8 @@ public struct Puzzle: Equatable {
 		return rows.map { Row(cells: $0, position: $0[0].row) }
 	}
 
-	var groups: [Group] {
+	/// The groups of the puzzle.
+	public var groups: [Group] {
 		var groups = [[Cell]](repeating: [Cell](repeating: Cell(value: 0, row: 0, column: 0, group: 0), count: 9), count: 9)
 
 		for row in 0..<9 {
@@ -197,6 +217,7 @@ public struct Puzzle: Equatable {
 		return groups.map { Group(cells: $0, position: $0[0].group) }
 	}
 
+	/// All containers of the puzzle, starting with rows, then columns and lastly groups.
 	var containers: [any Container] {
 		let r = rows.map { $0 as (any Container) }
 		let c = columns.map { $0 as (any Container) }

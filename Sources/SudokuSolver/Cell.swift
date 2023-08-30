@@ -6,11 +6,11 @@ public protocol Container: Sequence, Equatable {
 	var position: Int { get }
 }
 
-func ==(lhs: any Container, rhs: any Container) -> Bool {
+public func ==(lhs: any Container, rhs: any Container) -> Bool {
 	lhs.type == rhs.type && lhs.position == rhs.position && lhs.cells == rhs.cells
 }
 // We have to manually make this since we implement via `any` keyword
-func !=(lhs: any Container, rhs: any Container) -> Bool {
+public func !=(lhs: any Container, rhs: any Container) -> Bool {
 	!(lhs == rhs)
 }
 
@@ -44,15 +44,15 @@ public struct Row: Container {
 }
 
 public struct Coordinate: Equatable {
-	var row: Int
-	var column: Int
-	var group: Int
+	public var row: Int
+	public var column: Int
+	public var group: Int
 
-	enum Error: Swift.Error {
+	public enum Error: Swift.Error {
 		case invalidRow, invalidColumn, invalidGroup
 	}
 
-	init(row: Int, column: Int, group: Int) throws {
+	public init(row: Int, column: Int, group: Int) throws {
 		guard 1 <= row && row <= 9
 		else { throw Error.invalidRow }
 		guard 1 <= column && column <= 9
@@ -65,7 +65,7 @@ public struct Coordinate: Equatable {
 		self.group = group
 	}
 
-	init(row: Int, column: Int) throws {
+	public init(row: Int, column: Int) throws {
 		// This is now 0 for 1-3, 3 for 4-6, 6 for 7-9
 		let rg = (row-1) / 3 * 3
 
@@ -94,7 +94,7 @@ public struct Cell: Equatable, CustomStringConvertible, CustomDebugStringConvert
 		try! .init(row: row, column: column, group: group)
 	}
 
-	init(value: Int? = nil, coordinate: Coordinate) {
+	public init(value: Int? = nil, coordinate: Coordinate) {
 		self.init(value: value, row: coordinate.row, column: coordinate.column, group: coordinate.group)
 	}
 
