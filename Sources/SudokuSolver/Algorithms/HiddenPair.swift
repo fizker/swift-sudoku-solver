@@ -4,7 +4,7 @@ struct HiddenPair: Algorithm {
 
 	func callAsFunction(_ puzzle: Puzzle) -> Puzzle {
 		for container in puzzle.containers {
-			let candidates = puzzle.candidateCount(for: container)
+			let candidates = container.candidateCount
 			let two = candidates
 				.filter { $0.count == 2 }
 				.map(\.value)

@@ -7,7 +7,7 @@ struct HiddenSingle: Algorithm {
 			let cellCandidates = cell.pencilMarks
 
 			for container in puzzle.containers(for: cell) {
-				let containerCandidates = puzzle.candidateCount(for: container)
+				let containerCandidates = container.candidateCount
 
 				for containerCandidate in containerCandidates where containerCandidate.count == 1 {
 					if cellCandidates.contains(containerCandidate.value) {

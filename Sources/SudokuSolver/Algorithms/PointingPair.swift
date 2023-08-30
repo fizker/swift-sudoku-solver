@@ -3,7 +3,7 @@ struct PointingPair: Algorithm {
 
 	func callAsFunction(_ puzzle: Puzzle) -> Puzzle {
 		for container in puzzle.containers {
-			let candidates = puzzle.candidateCount(for: container)
+			let candidates = container.candidateCount
 			let valuesInPairs = candidates
 				.filter { $0.count == 2 }
 				.map(\.value)

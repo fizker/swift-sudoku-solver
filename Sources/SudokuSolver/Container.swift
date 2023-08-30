@@ -22,6 +22,21 @@ extension Container {
 	}
 }
 
+extension Container {
+	var candidateCount: [(value: Int, count: Int)] {
+		var containerCandidates = [1,2,3,4,5,6,7,8,9].map { (value: $0, count: 0) }
+
+		for cell in cells {
+			for value in cell.pencilMarks {
+				let index = value - 1
+				containerCandidates[index].count += 1
+			}
+		}
+
+		return containerCandidates
+	}
+}
+
 public struct Group: Container {
 	public let type = ContainerType.group
 

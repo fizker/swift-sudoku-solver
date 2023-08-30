@@ -122,19 +122,6 @@ public struct Puzzle: Equatable {
 		return candidates
 	}
 
-	func candidateCount(for container: some Container) -> [(value: Int, count: Int)] {
-		var containerCandidates = [1,2,3,4,5,6,7,8,9].map { (value: $0, count: 0) }
-
-		for cell in container.cells {
-			for value in cell.pencilMarks {
-				let index = value - 1
-				containerCandidates[index].count += 1
-			}
-		}
-
-		return containerCandidates
-	}
-
 	/// Returns the three containers that this cell is a part of.
 	func containers(for cell: Cell) -> [any Container] {
 		return [
