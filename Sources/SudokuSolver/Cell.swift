@@ -110,7 +110,7 @@ public struct Cell: Equatable, CustomStringConvertible, CustomDebugStringConvert
 
 	public var description: String { value?.description ?? "-" }
 	public var debugDescription: String {
-		"\(description) (r\(row)c\(column)g\(group)) P:[\(pencilMarks)]"
+		"\(description) (r\(row)c\(column)g\(group)) P:\(pencilMarks.sorted())"
 	}
 }
 

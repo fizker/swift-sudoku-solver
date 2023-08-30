@@ -1,5 +1,9 @@
 import Foundation
 
+extension Bool {
+	var toggled: Bool { !self }
+}
+
 public struct Puzzle: Equatable {
 	/// Cells for a standard 9x9 puzzle match the array like so:
 	/// ```
@@ -202,7 +206,7 @@ public struct Puzzle: Equatable {
 	}
 }
 
-extension Puzzle: CustomStringConvertible {
+extension Puzzle: CustomStringConvertible, CustomDebugStringConvertible {
 	public var description: String {
 		func add(_ separator: String, to array: [String]) -> [String] {
 			let first = Array(array[0..<3])
@@ -214,6 +218,20 @@ extension Puzzle: CustomStringConvertible {
 		let r = rows.map { add(" ", to: $0.map { $0.description }).joined() }
 
 		return add("", to: r).joined(separator: "\n")
+	}
+
+	public var debugDescription: String {
+		let cells = rows
+			.map { $0.cells.filter(\.hasValue.toggled).map(\.debugDescription).joined(separator: ", ") }
+			.filter(\.isEmpty.toggled)
+
+		return """
+		\(description)
+
+		\(cells.isEmpty ? "" : "Empty cells:")
+		\(cells.joined(separator: "\n"))
+		"""
+		.trimmingCharacters(in: .whitespacesAndNewlines)
 	}
 }
 
