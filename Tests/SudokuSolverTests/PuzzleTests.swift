@@ -198,6 +198,66 @@ class PuzzleTests: XCTestCase {
 		}
 	}
 
+	func test__initFromDSL__commentIsIncluded__commentIsIgnored() async throws {
+		let inputs: [(description: String, dsl: String)] = [
+			("Comment before", """
+			// Some comment
+			-31 764 259
+			695 281 374
+			472 593 861
+
+			153 829 647
+			987 456 132
+			246 137 598
+
+			768 915 423
+			514 372 986
+			329 648 715
+			"""),
+			("Comment in middle", """
+			-31 764 259
+			695 281 374
+			472 593 861
+
+			// Some comment
+
+			153 829 647
+			987 456 132
+			246 137 598
+
+			768 915 423
+			514 372 986
+			329 648 715
+			"""),
+			("Multiple comments", """
+			// Some comment
+			-31 764 259
+			695 281 374
+			// Some comment
+			472 593 861
+
+			153 829 647
+			987 456 132
+			246 137 598
+			// Some comment
+
+			768 915 423
+			514 372 986
+			329 648 715
+
+			// Some comment
+			"""),
+		]
+
+		for test in inputs {
+			var puzzle: Puzzle?
+			XCTAssertNoThrow(puzzle = try Puzzle(dsl: test.dsl), test.description)
+			if let puzzle {
+				XCTAssertEqual(puzzle, unsolvedPuzzle, test.description)
+			}
+		}
+	}
+
 	func test__initFromDSL__validFormsOfUnsolvedPuzzle__createsValidPuzzles() throws {
 		let inputs: [(description: String, dsl: String)] = [
 			("With whitespace", """

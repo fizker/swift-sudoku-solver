@@ -228,7 +228,7 @@ extension Puzzle: LosslessStringConvertible {
 			.components(separatedBy: .newlines)
 			.map { $0.trimmingCharacters(in: .whitespaces) }
 			.map { String($0.filter { " " != $0 }) }
-			.filter { !$0.isEmpty }
+			.filter { !$0.isEmpty && !$0.starts(with: "//") }
 
 		guard rows.count == 9
 		else { throw DSLParseError.invalidRowCount }
