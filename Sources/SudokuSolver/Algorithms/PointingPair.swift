@@ -12,14 +12,16 @@ struct PointingPair: Algorithm {
 				let pair = container.cells.filter { $0.pencilMarks.contains(value) }
 				assert(pair.count == 2, "We need exactly two for this algo to work")
 
-				guard let intersectingContainer = puzzle.containers.first(where: { $0 != container && $0.cells.contains(pair) })
+				guard let intersectingContainer = puzzle.containers.first(where: { $0 != container && pair.allSatisfy($0.cells.contains) })
 				else { continue }
 
-				guard intersectingContainer.cells.filter(notAt: pair.map(\.coordinate)).contains(where: { $0.pencilMarks.contains(value) })
+				let cellsToUpdate = intersectingContainer.cells.filter(notAt: pair.map(\.coordinate)).filter { $0.pencilMarks.contains(value) }
+
+				guard !cellsToUpdate.isEmpty
 				else { continue }
 
 				var puzzle = puzzle
-				for var cell in intersectingContainer.cells.filter(notAt: pair.map(\.coordinate)) {
+				for var cell in cellsToUpdate {
 					cell.pencilMarks.remove(value)
 					puzzle.update(cell)
 				}

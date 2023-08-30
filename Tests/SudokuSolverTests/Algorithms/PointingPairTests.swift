@@ -99,4 +99,41 @@ final class PointingPairTests: XCTestCase {
 			XCTAssertFalse(cell.pencilMarks.contains(8), cell.debugDescription)
 		}
 	}
+
+	func test__pointingPairPresent_pointingPairIsNotAdjacent__pencilMarksAreUpdated() async throws {
+		// There is a pointing pair at row 3 columns 7 and 9.
+		let puzzle = try Puzzle(dsl: """
+			-3- --- 674
+			5-6 7-- -9-
+			79- 36- -8-
+
+			2-7 6-- -5-
+			9-- --7 8-2
+			-5- --2 --7
+
+			--- 478 -3-
+			-7- --- 148
+			4-- --- 72-
+			"""
+		) ~ {
+			$0.pencilMarkKnownValues()
+			// There are other pointing pairs that are not problematic that are hit first. We eliminate them manually first
+			for update in [
+				(8,3,[3,5,9]),
+				(4,9,[3,9]),
+			] as [(row: Int, column: Int, pencilMarks: Set<Int>)] {
+				var cell = $0.cells.cell(at: try Coordinate(row: update.row, column: update.column))
+				cell.pencilMarks = update.pencilMarks
+				$0.update(cell)
+			}
+		}
+
+		let pointedAt = try Coordinate(row: 3, column: 6)
+
+		XCTAssertEqual(puzzle.cells.cell(at: pointedAt).pencilMarks, [ 1, 4, 5 ])
+
+		let solved = algo(puzzle)
+
+		XCTAssertEqual(solved.cells.cell(at: pointedAt).pencilMarks, [ 1, 4 ])
+	}
 }
