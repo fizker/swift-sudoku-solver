@@ -156,6 +156,26 @@ class FullPuzzleSolutionTests: XCTestCase {
 		let solved = solve(puzzle)
 		XCTAssertIsSolved(solved)
 	}
+
+	func test__solve__puzzleWithXWing__puzzleIsSolved() async throws {
+		let puzzle = try Puzzle(dsl: """
+			-3- --- --4
+			5-6 --- -9-
+			-9- 36- -8-
+
+			2-- 6-- -5-
+			9-- --7 8--
+			-5- --2 --7
+
+			--- -78 -3-
+			-7- --- 1-8
+			4-- --- -2-
+			"""
+		)
+
+		let solved = solve(puzzle)
+		XCTAssertIsSolved(solved)
+	}
 }
 
 extension FullPuzzleSolutionTests {
