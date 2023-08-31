@@ -23,17 +23,17 @@ class FullPuzzleSolutionTests: XCTestCase {
 
 	func test__solve__puzzleIsUnsolvable__theSolverReturnsThePuzzleUnsolved() throws {
 		let puzzle = try Puzzle(dsl: """
-		--1 --4 -3-
-		9-- --- --6
-		3-4 --- ---
+		1-- --- ---
+		--- --- ---
+		--- --- ---
 
-		-7- --- 6--
-		--- -7- -5-
-		--- 35- -9-
+		--- --- ---
+		--- --- ---
+		--- --- ---
 
-		--- 1-- 3-4
-		--6 --9 2-7
-		-42 8-7 9--
+		--- --- ---
+		--- --- ---
+		--- --- ---
 		""")
 
 		let solved = solve(puzzle)
