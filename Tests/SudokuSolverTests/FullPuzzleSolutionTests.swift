@@ -176,6 +176,29 @@ class FullPuzzleSolutionTests: XCTestCase {
 		let solved = solve(puzzle)
 		XCTAssertIsSolved(solved)
 	}
+
+	func test__solve__puzzleWithNakedTriple__puzzleIsSolved() async throws {
+		let puzzle = try Puzzle(dsl: """
+			// This one solves until a naked triple between cells R4C7 R7C7 R9C7 on 359
+			// This then opens the same naked triple in B9
+			// This then collapses in a series of naked and hidden singles
+			32- -5- -7-
+			--- --- -3-
+			9-- --8 6--
+
+			--- 172 --4
+			--- --- ---
+			1-- 543 ---
+
+			--6 2-- --8
+			-7- --- ---
+			-5- -84 -17
+			"""
+		)
+
+		let solved = solve(puzzle)
+		XCTAssertIsSolved(solved)
+	}
 }
 
 extension FullPuzzleSolutionTests {

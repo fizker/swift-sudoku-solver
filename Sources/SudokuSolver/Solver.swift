@@ -18,6 +18,7 @@ public class Solver {
 		NakedPair(),
 		HiddenPair(),
 		XWing(),
+		NakedTriple(),
 	]
 
 	private var puzzle: Puzzle
