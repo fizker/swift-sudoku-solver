@@ -15,6 +15,7 @@ public class Solver {
 		NakedSingle(),
 		HiddenSingle(),
 		PointingPair(),
+		PointingTriple(),
 		NakedPair(),
 		HiddenPair(),
 		XWing(),
