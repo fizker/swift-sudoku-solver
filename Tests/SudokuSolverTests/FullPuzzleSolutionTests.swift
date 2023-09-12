@@ -216,7 +216,7 @@ extension Array where Element == Puzzle {
 			.components(separatedBy: Self.separator)
 			.map { $0.trimmingCharacters(in: .whitespaces) }
 			.filter { !$0.isEmpty }
-			.map(Puzzle.init(dsl:))
+			.map { try Puzzle(dsl:$0) }
 	}
 
 	public init(stringLiteral value: StringLiteralType) {

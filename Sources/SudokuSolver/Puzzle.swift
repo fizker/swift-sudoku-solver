@@ -24,21 +24,6 @@ public struct Puzzle: Equatable {
 		self.cells = cells
 	}
 
-	/// Resets the pencil marks of all cells to only what can be derived from the current values of the cells.
-	public mutating func pencilMarkKnownValues() {
-		for var cell in cells {
-			guard !cell.hasValue
-			else { continue }
-
-			let candidates = candidates(for: cell)
-
-			for pencilMark in cell.pencilMarks where !candidates.contains(pencilMark) {
-				cell.pencilMarks.remove(pencilMark)
-				update(cell)
-			}
-		}
-	}
-
 	public init() {
 		try! self.init(cellValues: .init(repeating: nil, count: 81))
 	}
@@ -58,6 +43,28 @@ public struct Puzzle: Equatable {
 
 			return try Cell(value: $0, coordinate: .init(row: row, column: column))
 		})
+	}
+
+	/// Resets the pencil marks of all cells to only what can be derived from the current values of the cells.
+	public mutating func pencilMarkKnownValues() {
+		for var cell in cells {
+			guard !cell.hasValue
+			else { continue }
+
+			let candidates = candidates(for: cell)
+
+			for pencilMark in cell.pencilMarks where !candidates.contains(pencilMark) {
+				cell.pencilMarks.remove(pencilMark)
+				update(cell)
+			}
+		}
+	}
+
+	/// Returns a copy of the puzzle where pencil marks of all cells are reset to only what can be derived from the current values of the cells.
+	public func resettingPencilMarks() -> Puzzle {
+		var puzzle = self
+		puzzle.pencilMarkKnownValues()
+		return puzzle
 	}
 
 	/// Returns a copy of the puzzle updated with the given cell.
@@ -249,7 +256,7 @@ public enum DSLParseError : Error {
 }
 
 extension Puzzle: LosslessStringConvertible {
-	public init(dsl: String) throws {
+	public init(dsl: String, pencilMarked: Bool = false) throws {
 		let rows = dsl
 			.components(separatedBy: .newlines)
 			.map { $0.trimmingCharacters(in: .whitespaces) }
@@ -269,6 +276,10 @@ extension Puzzle: LosslessStringConvertible {
 		let cells = rows.flatMap { $0.map { Int("\($0)") } }
 
 		try self.init(cellValues: cells)
+
+		if pencilMarked {
+			pencilMarkKnownValues()
+		}
 	}
 
 	public init?(_ description: String) {
