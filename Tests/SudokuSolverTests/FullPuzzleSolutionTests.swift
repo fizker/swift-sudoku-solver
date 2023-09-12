@@ -177,6 +177,72 @@ class FullPuzzleSolutionTests: XCTestCase {
 		XCTAssertIsSolved(solved)
 	}
 
+	func test__solve__puzzlesRequiringYWing__puzzlesAreSolved() throws {
+		let dsl = """
+		// This harbors a y-wing
+		--1 --- ---
+		2-- --6 -7-
+		-5- -2- -3-
+
+		--2 --9 --1
+		--6 --- 24-
+		7-- 5-- 38-
+		-4- 38- -2-
+		--- 4-- --7
+		--- --- ---
+
+		\(separator)
+
+		// This harbors a y-wing
+		-2- 1-9 -6-
+		-14 -8- 2--
+		--- --- ---
+
+		--2 --- 9--
+		6-- -75 ---
+		--3 --- 8--
+
+		--- --- -5-
+		--7 -9- 14-
+		-9- 4-2 -3-
+
+		\(separator)
+
+		// This eventually has a y-wing between R2C7 R3C5 R2C9 between 138
+		--- 82- --9
+		--- --- --2
+		--4 5-- 6--
+
+		-2- --- 7--
+		79- -6- -23
+		--8 --- ---
+
+		--9 --4 1--
+		4-- --- ---
+		6-- -93 5--
+
+		\(separator)
+
+		// This harbors a y-wing
+		--6 9-- ---
+		-72 --1 ---
+		3-- -57 -8-
+
+		-6- --- 7-4
+		--- -3- ---
+		4-1 --- -2-
+
+		-8- 6-- --7
+		--- 32- 86-
+		--- --5 3--
+		"""
+
+		for puzzle in try parse(dsl) {
+			let solved = solve(puzzle)
+			XCTAssertIsSolved(solved)
+		}
+	}
+
 	func test__solve__puzzleWithNakedTriple__puzzleIsSolved() async throws {
 		let puzzle = try Puzzle(dsl: """
 			// This one solves until a naked triple between cells R4C7 R7C7 R9C7 on 359
@@ -198,6 +264,122 @@ class FullPuzzleSolutionTests: XCTestCase {
 
 		let solved = solve(puzzle)
 		XCTAssertIsSolved(solved)
+	}
+
+	func test__solve__variousPuzzles__puzzlesAreSolved() throws {
+		let dsl = """
+		5-- 8-- -9-
+		-9- --- 7--
+		7-2 --- 1-4
+
+		2-3 9-- 8--
+		-7- --- -25
+		--9 -8- -7-
+
+		-6- --2 --7
+		3-- 1-- 4--
+		--- -3- ---
+
+		\(separator)
+
+		6-- 87- 3--
+		-5- --- --4
+		--9 --6 --2
+
+		-72 --4 ---
+		--- --- ---
+		--- 3-- 68-
+
+		3-- 7-- 5--
+		2-- --- -7-
+		--7 -25 --1
+
+		\(separator)
+
+		// This one gets an avoidable rectangle between R4+8 C7+8
+		--- -82 3-7
+		--- 9-- --5
+		-1- -36 --8
+
+		1-2 --- --3
+		-5- -6- -4-
+		--- --- 6-9
+
+		--- -5- -3-
+		7-- --- ---
+		528 67- ---
+		"""
+
+		for puzzle in try parse(dsl) {
+			let solved = solve(puzzle)
+			XCTAssertIsSolved(solved)
+		}
+	}
+
+	func test__fromGoodSudoku() async throws {
+		let dsl = """
+			// This dies on an X-wing on 8 in R1+6 C1+4, clearing the rows
+			--- -7- 5-3
+			4-8 --- -1-
+			--- --2 89-
+
+			-4- -95 7-8
+			--7 -2- 9--
+			8-5 -4- -2-
+
+			3-6 --- ---
+			-8- 3-- -72
+			2-4 -1- ---
+
+			\(separator)
+
+			9-- 3-- -46
+			735 4-- ---
+			--- -9- -5-
+
+			2-- -6- -9-
+			--3 -27 1--
+			-87 1-- -3-
+
+			--9 -3- ---
+			--- --1 46-
+			84- --5 --3
+
+			\(separator)
+
+			--- 6-- 4--
+			--6 -24 ---
+			-37 --9 25-
+
+			--- --- --9
+			-9- 236 ---
+			8-- --- ---
+
+			-2- 1-- 54-
+			--5 34- 8--
+			--3 --8 -1-
+
+			\(separator)
+
+			--- 6-- --8
+			2-8 --- ---
+			-67 --3 2--
+
+			-5- --- 9--
+			--1 5-7 82-
+			--6 --- -5-
+
+			7-5 4-- ---
+			--- --5 1-3
+			6-- --2 ---
+
+			\(separator)
+			"""
+
+		for puzzle in try parse(dsl) {
+			let solved = solve(puzzle)
+			XCTAssertIsSolved(solved)
+		}
 	}
 }
 

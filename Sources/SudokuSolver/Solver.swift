@@ -19,6 +19,7 @@ public class Solver {
 		NakedPair(),
 		HiddenPair(),
 		XWing(),
+		YWing(),
 		NakedTriple(),
 	]
 

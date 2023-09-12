@@ -13,3 +13,11 @@ extension Sequence where Element: Equatable {
 		return false
 	}
 }
+
+extension Set {
+	func formingSymmetricDifference(_ other: Set<Element>) -> Set<Element> {
+		var copy = self
+		copy.formSymmetricDifference(other)
+		return copy
+	}
+}
