@@ -47,24 +47,12 @@ public struct Puzzle: Equatable {
 
 	/// Resets the pencil marks of all cells to only what can be derived from the current values of the cells.
 	public mutating func pencilMarkKnownValues() {
-		for var cell in cells {
-			guard !cell.hasValue
-			else { continue }
-
-			let candidates = candidates(for: cell)
-
-			for pencilMark in cell.pencilMarks where !candidates.contains(pencilMark) {
-				cell.pencilMarks.remove(pencilMark)
-				update(cell)
-			}
-		}
+		self = ResetPencilMarks.reset(self)
 	}
 
 	/// Returns a copy of the puzzle where pencil marks of all cells are reset to only what can be derived from the current values of the cells.
 	public func resettingPencilMarks() -> Puzzle {
-		var puzzle = self
-		puzzle.pencilMarkKnownValues()
-		return puzzle
+		return ResetPencilMarks.reset(self)
 	}
 
 	/// Returns a copy of the puzzle updated with the given cell.
