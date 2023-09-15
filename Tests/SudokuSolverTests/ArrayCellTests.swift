@@ -3,17 +3,17 @@ import XCTest
 
 final class ArrayCellTests: XCTestCase {
 	let cells = [
-		Cell(row: 1, column: 1, group: 1),
-		Cell(row: 1, column: 2, group: 1),
-		Cell(row: 1, column: 3, group: 1),
+		Cell(row: 1, column: 1, box: 1),
+		Cell(row: 1, column: 2, box: 1),
+		Cell(row: 1, column: 3, box: 1),
 
-		Cell(row: 1, column: 4, group: 2),
-		Cell(row: 1, column: 5, group: 2),
-		Cell(row: 1, column: 6, group: 2),
+		Cell(row: 1, column: 4, box: 2),
+		Cell(row: 1, column: 5, box: 2),
+		Cell(row: 1, column: 6, box: 2),
 
-		Cell(row: 1, column: 7, group: 2),
-		Cell(row: 1, column: 8, group: 2),
-		Cell(row: 1, column: 9, group: 2),
+		Cell(row: 1, column: 7, box: 2),
+		Cell(row: 1, column: 8, box: 2),
+		Cell(row: 1, column: 9, box: 2),
 	]
 
 	func test__cellAt__firstCellMatches__returnsCell() async throws {

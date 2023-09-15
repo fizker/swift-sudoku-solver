@@ -94,7 +94,7 @@ public struct Puzzle: Equatable {
 	/// Checks if the puzzle is currently solved. It is considered solved if all cells have a value.
 	public var isSolved: Bool { cells.allSatisfy(\.hasValue) }
 
-	/// Returns the possible digits that the cell can contain, after removing digits that are present in the contain row, column and group.
+	/// Returns the possible digits that the cell can contain, after removing digits that are present in the contain row, column and box.
 	func candidates(for cell: Cell) -> [Int] {
 		guard !cell.hasValue
 		else { return [] }
@@ -105,7 +105,7 @@ public struct Puzzle: Equatable {
 			guard !candidates.isEmpty
 			else { return [] }
 
-			guard c.row == cell.row || c.column == cell.column || c.group == cell.group
+			guard c.row == cell.row || c.column == cell.column || c.box == cell.box
 			else { continue }
 
 			guard let v = c.value
@@ -122,7 +122,7 @@ public struct Puzzle: Equatable {
 		return [
 			rows[cell.row - 1],
 			columns[cell.column - 1],
-			groups[cell.group - 1],
+			boxes[cell.box - 1],
 		]
 	}
 
@@ -137,14 +137,14 @@ public struct Puzzle: Equatable {
 			return cells.allSatisfy {
 				cell.row == $0.row ||
 				cell.column == $0.column ||
-				cell.group == $0.group
+				cell.box == $0.box
 			}
 		}
 	}
 
 	/// The columns of the puzzle.
 	public var columns: [Column] {
-		var columns = [[Cell]](repeating: [Cell](repeating: Cell(value: 0, row: 0, column: 0, group: 0), count: 9), count: 9)
+		var columns = [[Cell]](repeating: [Cell](repeating: Cell(value: 0, row: 0, column: 0, box: 0), count: 9), count: 9)
 
 		for column in 0..<9 {
 			for row in 0..<9 {
@@ -157,7 +157,7 @@ public struct Puzzle: Equatable {
 
 	/// The rows of the puzzle.
 	public var rows: [Row] {
-		var rows = [[Cell]](repeating: [Cell](repeating: Cell(value: 0, row: 0, column: 0, group: 0), count: 9), count: 9)
+		var rows = [[Cell]](repeating: [Cell](repeating: Cell(value: 0, row: 0, column: 0, box: 0), count: 9), count: 9)
 
 		for row in 0..<9 {
 			for column in 0..<9 {
@@ -168,16 +168,16 @@ public struct Puzzle: Equatable {
 		return rows.map { Row(cells: $0, position: $0[0].row) }
 	}
 
-	/// The groups of the puzzle.
-	public var groups: [Group] {
-		var groups = [[Cell]](repeating: [Cell](repeating: Cell(value: 0, row: 0, column: 0, group: 0), count: 9), count: 9)
+	/// The boxes of the puzzle.
+	public var boxes: [Box] {
+		var boxes = [[Cell]](repeating: [Cell](repeating: Cell(value: 0, row: 0, column: 0, box: 0), count: 9), count: 9)
 
 		for row in 0..<9 {
 			let rg = row / 3
 			let itemMod = (row % 3) * 3
 			for column in 0..<9 {
 				let cg = column / 3
-				let group = rg * 3 + cg
+				let box = rg * 3 + cg
 				let item: Int
 
 				switch column {
@@ -192,18 +192,18 @@ public struct Puzzle: Equatable {
 						break
 				}
 
-				groups[group][item] = cells[column + 9 * row]
+				boxes[box][item] = cells[column + 9 * row]
 			}
 		}
 
-		return groups.map { Group(cells: $0, position: $0[0].group) }
+		return boxes.map { Box(cells: $0, position: $0[0].box) }
 	}
 
-	/// All containers of the puzzle, starting with rows, then columns and lastly groups.
+	/// All containers of the puzzle, starting with rows, then columns and lastly boxes.
 	var containers: [any Container] {
 		let r = rows.map { $0 as (any Container) }
 		let c = columns.map { $0 as (any Container) }
-		let g = groups.map { $0 as (any Container) }
+		let g = boxes.map { $0 as (any Container) }
 
 		return r + c + g
 	}

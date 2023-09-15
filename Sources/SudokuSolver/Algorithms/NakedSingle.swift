@@ -1,5 +1,5 @@
 /// A naked single is when a cell can only contain one digit because other cells in either column, row or
-/// group have eliminated the other digits.
+/// box have eliminated the other digits.
 struct NakedSingle: Algorithm {
 	static let name = "Naked single"
 

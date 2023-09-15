@@ -1,4 +1,4 @@
-/// A hidden single is where only one cell in a column, row or group can contain a specific digit.
+/// A hidden single is where only one cell in a column, row or box can contain a specific digit.
 struct HiddenSingle: Algorithm {
 	static let name = "Hidden single"
 

@@ -31,7 +31,7 @@ class PuzzleTests: XCTestCase {
 		3,2,9, 6,4,8, 7,1,5,
 	].map { $0 == 0 ? nil : $0 })
 
-	func test__initWithCellValues__fullPuzzle__addsCorrectRowAndColumnAndGroupToCells() throws {
+	func test__initWithCellValues__fullPuzzle__addsCorrectRowAndColumnAndBoxToCells() throws {
 		let puzzle = try Puzzle(cellValues: [
 			8,3,1, 7,6,4, 2,5,9, // 0-8
 			6,9,5, 2,8,1, 3,7,4, // 9-17
@@ -46,12 +46,12 @@ class PuzzleTests: XCTestCase {
 			3,2,9, 6,4,8, 7,1,5, // 72-80
 		])
 
-		XCTAssertEqual(puzzle.cells[0], Cell(value: 8, row: 1, column: 1, group: 1), puzzle.cells[0].debugDescription)
-		XCTAssertEqual(puzzle.cells[3], Cell(value: 7, row: 1, column: 4, group: 2), puzzle.cells[3].debugDescription)
-		XCTAssertEqual(puzzle.cells[20], Cell(value: 2, row: 3, column: 3, group: 1), puzzle.cells[20].debugDescription)
-		XCTAssertEqual(puzzle.cells[22], Cell(value: 9, row: 3, column: 5, group: 2), puzzle.cells[22].debugDescription)
-		XCTAssertEqual(puzzle.cells[40], Cell(value: 5, row: 5, column: 5, group: 5), puzzle.cells[40].debugDescription)
-		XCTAssertEqual(puzzle.cells[70], Cell(value: 8, row: 8, column: 8, group: 9), puzzle.cells[42].debugDescription)
+		XCTAssertEqual(puzzle.cells[0], Cell(value: 8, row: 1, column: 1, box: 1), puzzle.cells[0].debugDescription)
+		XCTAssertEqual(puzzle.cells[3], Cell(value: 7, row: 1, column: 4, box: 2), puzzle.cells[3].debugDescription)
+		XCTAssertEqual(puzzle.cells[20], Cell(value: 2, row: 3, column: 3, box: 1), puzzle.cells[20].debugDescription)
+		XCTAssertEqual(puzzle.cells[22], Cell(value: 9, row: 3, column: 5, box: 2), puzzle.cells[22].debugDescription)
+		XCTAssertEqual(puzzle.cells[40], Cell(value: 5, row: 5, column: 5, box: 5), puzzle.cells[40].debugDescription)
+		XCTAssertEqual(puzzle.cells[70], Cell(value: 8, row: 8, column: 8, box: 9), puzzle.cells[42].debugDescription)
 	}
 
 	func test__columns__fullPuzzle__returnsExpectedCells() throws {
@@ -86,10 +86,10 @@ class PuzzleTests: XCTestCase {
 		])
 	}
 
-	func test__groups__fullPuzzle__returnsExpectedCells() throws {
-		let groups = solvedPuzzle.groups.map { $0.map { $0.value } }
+	func test__boxes__fullPuzzle__returnsExpectedCells() throws {
+		let boxes = solvedPuzzle.boxes.map { $0.map { $0.value } }
 
-		XCTAssertEqual(groups, [
+		XCTAssertEqual(boxes, [
 			[
 				8,3,1,
 				6,9,5,
@@ -393,7 +393,7 @@ class PuzzleTests: XCTestCase {
 		XCTAssertEqual(candidates, [8])
 	}
 
-	func test__candidatesForCell__cellHasNoValue_multipleMissingInGroup_oneMissingInRow_oneMissingInColumn__returnsMissingNumber() throws {
+	func test__candidatesForCell__cellHasNoValue_multipleMissingInBox_oneMissingInRow_oneMissingInColumn__returnsMissingNumber() throws {
 		let puzzle = try Puzzle(dsl: """
 			-31 764 259
 			695 281 374
@@ -415,7 +415,7 @@ class PuzzleTests: XCTestCase {
 		XCTAssertEqual(candidates, [8])
 	}
 
-	func test__candidatesForCell__cellHasNoValue_multipleMissingInGroup_multipleMissingInRow_oneMissingInColumn__returnsMissingNumber() throws {
+	func test__candidatesForCell__cellHasNoValue_multipleMissingInBox_multipleMissingInRow_oneMissingInColumn__returnsMissingNumber() throws {
 		let puzzle = try Puzzle(dsl: """
 			-31 764 -59
 			695 281 374
@@ -437,7 +437,7 @@ class PuzzleTests: XCTestCase {
 		XCTAssertEqual(candidates, [8])
 	}
 
-	func test__candidatesForCell__cellHasNoValue_multipleMissingInGroup_oneMissingInRow_multipleMissingInColumn__returnsMissingNumber() throws {
+	func test__candidatesForCell__cellHasNoValue_multipleMissingInBox_oneMissingInRow_multipleMissingInColumn__returnsMissingNumber() throws {
 		let puzzle = try Puzzle(dsl: """
 			-31 764 259
 			695 281 374
@@ -459,7 +459,7 @@ class PuzzleTests: XCTestCase {
 		XCTAssertEqual(candidates, [8])
 	}
 
-	func test__candidatesForCell__cellHasNoValue_oneMissingInGroup_multipleMissingInRow_multipleMissingInColumn__returnsMissingNumber() throws {
+	func test__candidatesForCell__cellHasNoValue_oneMissingInBox_multipleMissingInRow_multipleMissingInColumn__returnsMissingNumber() throws {
 		let puzzle = try Puzzle(dsl: """
 			-31 764 -59
 			695 281 374
@@ -481,7 +481,7 @@ class PuzzleTests: XCTestCase {
 		XCTAssertEqual(candidates, [8])
 	}
 
-	func test__candidatesForCell__cellHasNoValue_sameOtherNumberMissingInGroupAndRowAndColumn__returnsAllMissingNumbers() throws {
+	func test__candidatesForCell__cellHasNoValue_sameOtherNumberMissingInBoxAndRowAndColumn__returnsAllMissingNumbers() throws {
 		let puzzle = try Puzzle(dsl: """
 			-31 764 -59
 			695 281 374
@@ -503,7 +503,7 @@ class PuzzleTests: XCTestCase {
 		XCTAssertEqual(candidates, [2, 8])
 	}
 
-	func test__candidatesForCell__cellHasNoValue_sameOtherNumberMissingInGroupAndRow_differentNumberMissingInColumn__returnsSingleMissingNumber() throws {
+	func test__candidatesForCell__cellHasNoValue_sameOtherNumberMissingInBoxAndRow_differentNumberMissingInColumn__returnsSingleMissingNumber() throws {
 		let puzzle = try Puzzle(dsl: """
 			-31 764 -59
 			695 281 374
@@ -525,7 +525,7 @@ class PuzzleTests: XCTestCase {
 		XCTAssertEqual(candidates, [8])
 	}
 
-	func test__cellsPointingAt__twoCellsGiven_groupIsShared_rowIsNotShared_colIsNotShared__returnsOtherCellsInGroup() async throws {
+	func test__cellsPointingAt__twoCellsGiven_boxIsShared_rowIsNotShared_colIsNotShared__returnsOtherCellsInBox() async throws {
 		let puzzle = Puzzle()
 
 		let cells = try puzzle.cells.filter(at: [
@@ -536,10 +536,10 @@ class PuzzleTests: XCTestCase {
 		let actual = puzzle.cells(pointingAt: cells)
 
 		XCTAssertEqual(actual.count, 7)
-		XCTAssertEqual(actual.map(\.group) |> Set.init, [1])
+		XCTAssertEqual(actual.map(\.box) |> Set.init, [1])
 	}
 
-	func test__cellsPointingAt__twoCellsGiven_groupIsShared_rowIsShared_colIsNotShared__returnsOtherCellsInGroupAndRow() async throws {
+	func test__cellsPointingAt__twoCellsGiven_boxIsShared_rowIsShared_colIsNotShared__returnsOtherCellsInBoxAndRow() async throws {
 		let puzzle = Puzzle()
 
 		let cells = try puzzle.cells.filter(at: [
@@ -551,11 +551,11 @@ class PuzzleTests: XCTestCase {
 
 		XCTAssertEqual(actual.count, 13)
 		XCTAssertTrue(actual.allSatisfy({
-			$0.group == 1 || $0.row == 1
+			$0.box == 1 || $0.row == 1
 		}))
 	}
 
-	func test__cellsPointingAt__twoCellsGiven_groupIsNotShared_rowIsNotShared_colIsNotShared__returnsPointingCells() async throws {
+	func test__cellsPointingAt__twoCellsGiven_boxIsNotShared_rowIsNotShared_colIsNotShared__returnsPointingCells() async throws {
 		let puzzle = Puzzle()
 
 		let cells = try puzzle.cells.filter(at: [
@@ -571,7 +571,7 @@ class PuzzleTests: XCTestCase {
 		]))
 	}
 
-	func test__cellsPointingAt__twoCellsGiven_groupIsNotShared_rowIsNotShared_colIsNotShared_groupsShareColumn__returnsPointingCells() async throws {
+	func test__cellsPointingAt__twoCellsGiven_boxIsNotShared_rowIsNotShared_colIsNotShared_boxsShareColumn__returnsPointingCells() async throws {
 		let puzzle = Puzzle()
 
 		let cells = try puzzle.cells.filter(at: [
@@ -701,7 +701,7 @@ class PuzzleTests: XCTestCase {
 		XCTAssertEqual(puzzle.cells.cell(at: coordinates[1]).pencilMarks, [9])
 	}
 
-	func test__pencilMarkKnownValues__multipleItemsMissingInRowAndColumn_singleItemMissingInGroup__updatesPencilMarks() throws {
+	func test__pencilMarkKnownValues__multipleItemsMissingInRowAndColumn_singleItemMissingInBox__updatesPencilMarks() throws {
 		var puzzle = try Puzzle(dsl: """
 			831 764 259
 			695 281 374

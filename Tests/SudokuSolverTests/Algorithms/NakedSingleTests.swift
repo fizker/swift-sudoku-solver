@@ -107,7 +107,7 @@ class NakedSingleTests: XCTestCase {
 		""")
 	}
 
-	func test__multipleItemsMissingInRowAndColumn_singleItemMissingInGroup__addsInTheMissingGroup() throws {
+	func test__multipleItemsMissingInRowAndColumn_singleItemMissingInBox__addsInTheMissingBox() throws {
 		var puzzle = try Puzzle(dsl: """
 		831 764 259
 		695 281 374

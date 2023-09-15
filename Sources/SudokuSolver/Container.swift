@@ -1,4 +1,4 @@
-public enum ContainerType { case row, column, group }
+public enum ContainerType { case row, column, box }
 
 public protocol Container: Sequence, Equatable {
 	var type: ContainerType { get }
@@ -37,8 +37,8 @@ extension Container {
 	}
 }
 
-public struct Group: Container {
-	public let type = ContainerType.group
+public struct Box: Container {
+	public let type = ContainerType.box
 
 	public let cells: [Cell]
 	public let position: Int
