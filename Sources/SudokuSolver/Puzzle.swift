@@ -142,6 +142,13 @@ public struct Puzzle: Equatable {
 		}
 	}
 
+	/// Returns all cells that are pointing at the given cells.
+	///
+	/// `O(n*2m)` where `n` is `puzzle.cells.count` and `m` is the number of cells passed in.
+	func cells(pointingAt cells: Cell...) -> [Cell] {
+		return self.cells(pointingAt: cells)
+	}
+
 	/// The columns of the puzzle.
 	public var columns: [Column] {
 		var columns = [[Cell]](repeating: [Cell](repeating: Cell(value: 0, row: 0, column: 0, box: 0), count: 9), count: 9)

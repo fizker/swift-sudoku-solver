@@ -1,3 +1,7 @@
+extension Collection {
+	var isNotEmpty: Bool { !isEmpty }
+}
+
 extension Sequence where Element: Equatable {
 	func sorted(by path: KeyPath<Element, some Comparable>) -> [Element] {
 		sorted { $0[keyPath: path] < $1[keyPath: path] }

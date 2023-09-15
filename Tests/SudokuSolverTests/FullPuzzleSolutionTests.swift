@@ -308,6 +308,21 @@ class FullPuzzleSolutionTests: XCTestCase {
 		--- -5- -3-
 		7-- --- ---
 		528 67- ---
+
+		\(separator)
+
+		// This includes a 2-string kite
+		--5 --- -6-
+		-69 47- ---
+		--- --2 7--
+
+		--1 --- -2-
+		8-- 21- -9-
+		9-- -3- 47-
+
+		-1- --8 -5-
+		--6 --4 1--
+		--- 1-- 8-6
 		"""
 
 		for puzzle in try parse(dsl) {

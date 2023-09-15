@@ -12,5 +12,6 @@ public extension Array where Element == any Algorithm {
 		XWing(),
 		YWing(),
 		NakedTriple(),
+		TwoStringKite(),
 	] }
 }
