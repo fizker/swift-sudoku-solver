@@ -146,10 +146,10 @@ public struct Puzzle: Equatable {
 	public var columns: [Column] {
 		var columns = [[Cell]](repeating: [Cell](repeating: Cell(value: 0, row: 0, column: 0, box: 0), count: 9), count: 9)
 
-		for column in 0..<9 {
-			for row in 0..<9 {
-				columns[column][row] = cells[column + 9 * row]
-			}
+		for cell in cells {
+			let row = cell.row - 1
+			let column = cell.column - 1
+			columns[column][row] = cell
 		}
 
 		return columns.map { Column(cells: $0, position: $0[0].column) }
@@ -159,10 +159,10 @@ public struct Puzzle: Equatable {
 	public var rows: [Row] {
 		var rows = [[Cell]](repeating: [Cell](repeating: Cell(value: 0, row: 0, column: 0, box: 0), count: 9), count: 9)
 
-		for row in 0..<9 {
-			for column in 0..<9 {
-				rows[row][column] = cells[column + 9 * row]
-			}
+		for cell in cells {
+			let row = cell.row - 1
+			let column = cell.column - 1
+			rows[row][column] = cell
 		}
 
 		return rows.map { Row(cells: $0, position: $0[0].row) }
@@ -170,30 +170,34 @@ public struct Puzzle: Equatable {
 
 	/// The boxes of the puzzle.
 	public var boxes: [Box] {
+		var mods = [Int](repeating: 0, count: 9)
+		for row in 0..<9 {
+			mods[row] = (row % 3) * 3
+		}
+
 		var boxes = [[Cell]](repeating: [Cell](repeating: Cell(value: 0, row: 0, column: 0, box: 0), count: 9), count: 9)
 
-		for row in 0..<9 {
-			let rg = row / 3
-			let itemMod = (row % 3) * 3
-			for column in 0..<9 {
-				let cg = column / 3
-				let box = rg * 3 + cg
-				let item: Int
+		for cell in cells {
+			let row = cell.row - 1
+			let column = cell.column - 1
+			let box = cell.box - 1
 
-				switch column {
-					case ...2:
-						item = itemMod + column
-					case 3...5:
-						item = itemMod + column - 3
-					case 6...:
-						item = itemMod + column - 6
-					default:
-						fatalError("This should never be reached")
-						break
-				}
+			let itemMod = mods[row]
+			let item: Int
 
-				boxes[box][item] = cells[column + 9 * row]
+			switch column {
+				case ...2:
+					item = itemMod + column
+				case 3...5:
+					item = itemMod + column - 3
+				case 6...:
+					item = itemMod + column - 6
+				default:
+					fatalError("This should never be reached")
+					break
 			}
+
+			boxes[box][item] = cell
 		}
 
 		return boxes.map { Box(cells: $0, position: $0[0].box) }
