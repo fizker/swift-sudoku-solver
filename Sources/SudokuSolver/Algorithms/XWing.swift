@@ -30,12 +30,17 @@ struct XWing: Algorithm {
 
 					let cellsInRows = puzzle[keyPath: secondaryContainerPath][cells[0][keyPath: secondaryCellPositionPath] - 1].cells + puzzle[keyPath: secondaryContainerPath][cells[1][keyPath: secondaryCellPositionPath] - 1].cells
 					let cellsToUpdate = cellsInRows.filter(notAt: (cells+secondCells).map(\.coordinate))
+						.filter { $0.pencilMarks.contains(potentialXWingValue) }
+
+					guard !cellsToUpdate.isEmpty
+					else { continue }
 
 					var puzzle = puzzle
 					for var cell in cellsToUpdate {
 						cell.pencilMarks.remove(potentialXWingValue)
 						puzzle.update(cell)
 					}
+
 					return puzzle
 				}
 			}
