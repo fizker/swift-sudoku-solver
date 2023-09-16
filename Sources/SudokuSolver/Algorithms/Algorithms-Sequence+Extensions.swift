@@ -5,12 +5,12 @@ public extension Array where Element == any Algorithm {
 	static var all: [Element] { [
 		NakedSingle(),
 		HiddenSingle(),
-		PointingPair(),
-		PointingTriple(),
 		NakedPair(),
 		HiddenPair(),
 		XWing(),
 		YWing(),
+		PointingPair(),
+		PointingTriple(),
 		NakedTriple(),
 		TwoStringKite(),
 	] }
