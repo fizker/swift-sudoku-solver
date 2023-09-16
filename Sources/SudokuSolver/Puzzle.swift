@@ -59,6 +59,8 @@ public struct Puzzle: Equatable {
 	///
 	/// If the cell have a value, the pencil marks of any cell that it points at will be updated acoordingly.
 	///
+	/// - Complexity: If the value of the cell did not change: O(1)
+	/// - Complexity: If the value of the cell did change: O(3g) where g is the number of cells in a group.
 	/// - parameter cell: The cell to update.
 	/// - returns: A copy of the puzzle with the updated cell.
 	func updating(_ cell: Cell) -> Puzzle {
@@ -71,6 +73,8 @@ public struct Puzzle: Equatable {
 	///
 	/// If the cell have a value, the pencil marks of any cell that it points at will be updated acoordingly.
 	///
+	/// - Complexity: If the value of the cell did not change: O(1)
+	/// - Complexity: If the value of the cell did change: O(3g) where g is the number of cells in a group.
 	/// - parameter cell: The cell to update.
 	mutating func update(_ cell: Cell) {
 		let rowIndex = cell.row - 1
@@ -118,6 +122,8 @@ public struct Puzzle: Equatable {
 	}
 
 	/// Returns the three containers that this cell is a part of.
+	///
+	/// - Complexity: O(1).
 	func containers(for cell: Cell) -> [any Container] {
 		return [
 			rows[cell.row - 1],
@@ -128,28 +134,43 @@ public struct Puzzle: Equatable {
 
 	/// Returns all cells that are pointing at the given cells.
 	///
-	/// `O(n*2m)` where `n` is `puzzle.cells.count` and `m` is the number of cells passed in.
+	/// The number of cells returned depends greatly on the number of cells passed in, and maxes out the following way:
+	/// - Input is 1 cell: Always 20 cells back, as this is the number of cells in the containing boxes, rows and columns.
+	/// - Input is 2 cells: 14 if they share two groups, 7 if they only shares one group, decreasing from there.
+	/// - Input is 3 cells: 12 if they share two groups, 6 if the cells only shares one group, decreasing from there.
+	/// - Input is 4 cells: 5, if they share the same group, decreasing from there.
+	///
+	/// - Complexity: `O(n*m)` where `n` is `puzzle.cells.count` and `m` is the number of cells passed in.
+	/// - Returns: All cells that can see the cells passed in. This is a number between 0 and 20, depending on the number of cells passed in.
 	func cells(pointingAt cells: [Cell]) -> [Cell] {
 		self.cells.filter { cell in
-			guard !cells.contains(cell)
-			else { return false }
-
 			return cells.allSatisfy {
-				cell.row == $0.row ||
+				cell != $0 &&
+				(cell.row == $0.row ||
 				cell.column == $0.column ||
-				cell.box == $0.box
+				cell.box == $0.box)
 			}
 		}
 	}
 
 	/// Returns all cells that are pointing at the given cells.
 	///
-	/// `O(n*2m)` where `n` is `puzzle.cells.count` and `m` is the number of cells passed in.
+	/// The number of cells returned depends greatly on the number of cells passed in, and maxes out the following way:
+	/// - Input is 1 cell: Always 20 cells back, as this is the number of cells in the containing boxes, rows and columns.
+	/// - Input is 2 cells: 14 if they share two groups, 7 if they only shares one group, decreasing from there.
+	/// - Input is 3 cells: 12 if they share two groups, 6 if the cells only shares one group, decreasing from there.
+	/// - Input is 4 cells: 5, if they share the same group, decreasing from there.
+	///
+	/// - Complexity: `O(n*m)` where `n` is `puzzle.cells.count` and `m` is the number of cells passed in.
+	/// - Returns: All cells that can see the cells passed in. This is a number between 0 and 20, depending on the number of cells passed in.
 	func cells(pointingAt cells: Cell...) -> [Cell] {
 		return self.cells(pointingAt: cells)
 	}
 
-	/// The columns of the puzzle.
+	/// The rows of the puzzle.
+	///
+	/// - Complexity: O(2n+c) where n is the number of cells in the puzzle and c is the number of rows in the puzzle (sqrt(n)).
+	/// - Complexity: O(2 \* 81 + 9) -> O(171).
 	public var columns: [Column] {
 		var columns = [[Cell]](repeating: [Cell](repeating: Cell(value: 0, row: 0, column: 0, box: 0), count: 9), count: 9)
 
@@ -163,6 +184,9 @@ public struct Puzzle: Equatable {
 	}
 
 	/// The rows of the puzzle.
+	///
+	/// - Complexity: O(2n+c) where n is the number of cells in the puzzle and c is the number of columns in the puzzle (sqrt(n)).
+	/// - Complexity: O(2 \* 81 + 9) -> O(171).
 	public var rows: [Row] {
 		var rows = [[Cell]](repeating: [Cell](repeating: Cell(value: 0, row: 0, column: 0, box: 0), count: 9), count: 9)
 
@@ -176,6 +200,9 @@ public struct Puzzle: Equatable {
 	}
 
 	/// The boxes of the puzzle.
+	///
+	/// - Complexity: O(2b + 2n) where n is the number of cells in the puzzle and b is the number of boxes in the puzzle (sqrt(n)).
+	/// - Complexity: O(2 \* 81 + 2 \* 9) -> O(180).
 	public var boxes: [Box] {
 		var mods = [Int](repeating: 0, count: 9)
 		for row in 0..<9 {
@@ -211,6 +238,11 @@ public struct Puzzle: Equatable {
 	}
 
 	/// All containers of the puzzle, starting with rows, then columns and lastly boxes.
+	///
+	/// - Complexity: O(2*n*+*g* + 2*n*+*g* + 2*n*+2*g*) -> O(6*n* + 4*g*)
+	///   where *n* is the number of cells in the puzzle and *g* is the number of groups.
+	/// - Complexity: O(6 \* 81 + 4 \* 9) -> O(522)
+	/// - Returns: All groups in the puzzle. There are 27 groups in a 9x9 puzzle
 	var containers: [any Container] {
 		let r = rows.map { $0 as (any Container) }
 		let c = columns.map { $0 as (any Container) }
