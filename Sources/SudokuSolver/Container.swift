@@ -23,6 +23,13 @@ extension Container {
 }
 
 extension Container {
+	/// Returns the number of candidates for each digit.
+	///
+	/// Any cell that can contain a digit is considered a candidate.
+	///
+	/// - Complexity: O(c+cn) where n is the number of cells in the puzzle and c is the number of potential digits (9).
+	/// - Complexity: O(9 + 9 \* 81) -> O(738)
+	/// - Returns: All digits along with a count of how many times they can potentially be entered into this group.
 	var candidateCount: [(value: Int, count: Int)] {
 		var containerCandidates = [1,2,3,4,5,6,7,8,9].map { (value: $0, count: 0) }
 

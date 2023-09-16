@@ -70,22 +70,27 @@ public struct Cell: Equatable, CustomStringConvertible, CustomDebugStringConvert
 }
 
 extension Sequence where Element == Cell {
+	/// - Complexity: O(*n*) where *n* is the number of cells in the sequence.
 	func cell(at coordinate: Coordinate) -> Cell {
 		first { $0.coordinate == coordinate }!
 	}
 
+	/// - Complexity: O(*nm*) where *n* is the number of cells in the sequence and *m* is the number of coordinates passed in.
 	func filter(at coordinates: [Coordinate]) -> [Cell] {
 		filter { coordinates.contains($0.coordinate) }
 	}
 
+	/// - Complexity: O(*nm*) where *n* is the number of cells in the sequence and *m* is the number of coordinates passed in.
 	func filter(at coordinates: Coordinate...) -> [Cell] {
 		filter(at: coordinates)
 	}
 
+	/// - Complexity: O(*nm*) where *n* is the number of cells in the sequence and *m* is the number of coordinates passed in.
 	func filter(notAt coordinates: [Coordinate]) -> [Cell] {
 		filter { !coordinates.contains($0.coordinate) }
 	}
 
+	/// - Complexity: O(*nm*) where *n* is the number of cells in the sequence and *m* is the number of coordinates passed in.
 	func filter(notAt coordinates: Coordinate...) -> [Cell] {
 		filter(notAt: coordinates)
 	}
