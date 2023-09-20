@@ -1,4 +1,4 @@
-/// - Complexity: O(353.250 \* 2) -> O(706.500) for a regular 9x9 sudoku puzzle.
+/// - Complexity: O(90.252 \* 2) -> O(180.504) for a regular 9x9 sudoku puzzle.
 struct XWing: Algorithm {
 	static let name = "X-Wing"
 
@@ -8,10 +8,14 @@ struct XWing: Algorithm {
 		puzzle
 	}
 
-	/// - Complexity: O(171 + 9(738 + 18 + 9(9 + 171 + 9(9 + 171 \* 2 + 90 + 14))) -> O(353.250).
+	/// - Complexity: O(171 \* 2 + 9(738 + 18 + 9(9 + 9(9 + 90 + 14))) -> O(90.252).
 	func resolveXWing(puzzle: Puzzle, primaryContainerPath: KeyPath<Puzzle, [some Container]>, secondaryContainerPath: KeyPath<Puzzle, [some Container]>, secondaryCellPositionPath: KeyPath<Cell, Int>) -> Puzzle? {
-		// O(171 + 9n)
-		for container in puzzle[keyPath: primaryContainerPath] {
+		// 171 + 171
+		let primaryContainers = puzzle[keyPath: primaryContainerPath]
+		let secondaryContainers = puzzle[keyPath: secondaryContainerPath]
+
+		// O(9n)
+		for container in primaryContainers {
 			// O(738)
 			let candidates = container.candidateCount
 			// O(9+9)
@@ -25,8 +29,8 @@ struct XWing: Algorithm {
 				// O(9) producing 2
 				let cells = container.cells.filter { $0.pencilMarks.contains(potentialXWingValue) }
 
-				// O(171 + 9n)
-				for secondContainer in puzzle[keyPath: primaryContainerPath] where container != secondContainer {
+				// O(9n)
+				for secondContainer in primaryContainers where container != secondContainer {
 					// O(9) producing 2
 					let secondCells = secondContainer.cells.filter { $0.pencilMarks.contains(potentialXWingValue) }
 
@@ -37,8 +41,7 @@ struct XWing: Algorithm {
 					guard cells[0][keyPath: secondaryCellPositionPath] == secondCells[0][keyPath: secondaryCellPositionPath] && cells[1][keyPath: secondaryCellPositionPath] == secondCells[1][keyPath: secondaryCellPositionPath]
 					else { continue }
 
-					// O(171 + 171)
-					let cellsInRows = puzzle[keyPath: secondaryContainerPath][cells[0][keyPath: secondaryCellPositionPath] - 1].cells + puzzle[keyPath: secondaryContainerPath][cells[1][keyPath: secondaryCellPositionPath] - 1].cells
+					let cellsInRows = secondaryContainers[cells[0][keyPath: secondaryCellPositionPath] - 1].cells + secondaryContainers[cells[1][keyPath: secondaryCellPositionPath] - 1].cells
 					// O(18*4 + 4 + 14) -> O(90)
 					let cellsToUpdate = cellsInRows.filter(notAt: (cells+secondCells).map(\.coordinate))
 						.filter { $0.pencilMarks.contains(potentialXWingValue) }
