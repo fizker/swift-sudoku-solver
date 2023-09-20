@@ -2,12 +2,12 @@
 ///
 /// The result of a match finds a digit.
 ///
-/// - Complexity: O(27(738 + 18)) -> O(20.412) for a regular 9x9 sudoku puzzle.
+/// - Complexity: O(522 + 27(738 + 18)) -> O(20.934) for a regular 9x9 sudoku puzzle.
 struct HiddenSingle: Algorithm {
 	static let name = "Hidden single"
 
 	func callAsFunction(_ puzzle: Puzzle) -> Puzzle {
-		// O(27)
+		// O(522 + 27n)
 		for container in puzzle.containers {
 			// O(c+cn)
 			let containerCandidates = container.candidateCount

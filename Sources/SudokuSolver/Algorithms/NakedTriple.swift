@@ -1,11 +1,11 @@
 /// A naked pair is if two numbers can only exist twice in a container, and they only exist in the same two cells.
 ///
-/// - Complexity: O(27(9log9 + 9 + 9(9(9 + 9 + 276)))) -> O(643.453)
+/// - Complexity: O(522 + 27(9log9 + 9 + 9(9(9 + 9 + 276)))) -> O(643.975)
 struct NakedTriple: Algorithm {
 	static let name = "Naked triple"
 
 	func callAsFunction(_ puzzle: Puzzle) -> Puzzle {
-		/// O(27)
+		/// O(522 + 27n)
 		for container in puzzle.containers {
 			// O(9log9 + 9)
 			let cells = container.cells.sorted(by: \.pencilMarks.count)
