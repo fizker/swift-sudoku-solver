@@ -1,11 +1,11 @@
 /// A naked pair is if two numbers can only exist twice in a container, and they only exist in the same two cells.
 ///
-/// - Complexity: O(27(738 + 9(9 + 9(9 + 9 + 2)))) -> O(65.853) for a reguler 9x9 sudoku puzzle.
+/// - Complexity: O(522 + 27(738 + 9(9 + 9(9 + 9 + 2)))) -> O(66.375) for a reguler 9x9 sudoku puzzle.
 struct HiddenPair: Algorithm {
 	static let name = "Hidden pair"
 
 	func callAsFunction(_ puzzle: Puzzle) -> Puzzle {
-		// O(27)
+		// O(522 + 27n)
 		for container in puzzle.containers {
 			// O(738)
 			let candidates = container.candidateCount
