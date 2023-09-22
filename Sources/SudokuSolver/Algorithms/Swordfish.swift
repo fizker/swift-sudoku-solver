@@ -62,7 +62,7 @@ struct Fish {
 		return nil
 	}
 
-	func resolve(candidate: FishCandidate, groups: ArraySlice<some Container>, crossingGroups: [some Container]) -> [Cell] {
+	private func resolve(candidate: FishCandidate, groups: ArraySlice<some Container>, crossingGroups: [some Container]) -> [Cell] {
 		for index in groups.indices {
 			let group = groups[index]
 
@@ -83,7 +83,7 @@ struct Fish {
 		return []
 	}
 
-	struct FishCandidate {
+	private struct FishCandidate {
 		/// The direction of the group, ie. if this represents a Fish on rows or columns.
 		var groupType: ContainerType
 
@@ -152,9 +152,11 @@ struct Fish {
 			guard group.type == groupType
 			else { return nil }
 
+			let requiredMatches = fishType.requiredMatches
+
 			let candidateCells = group.cells.filter { $0.pencilMarks.contains(digit) }
 
-			guard 2 <= candidateCells.count && candidateCells.count <= fishType.requiredMatches
+			guard 2 <= candidateCells.count && candidateCells.count <= requiredMatches
 			else { return nil }
 
 			var newCandidate = self
@@ -162,7 +164,7 @@ struct Fish {
 				newCandidate.add(cell)
 			}
 
-			guard newCandidate.positionInGroups.count <= fishType.requiredMatches
+			guard newCandidate.positionInGroups.count <= requiredMatches && newCandidate.groups.count <= requiredMatches
 			else { return nil }
 
 			return newCandidate
