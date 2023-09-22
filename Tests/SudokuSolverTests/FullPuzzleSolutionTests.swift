@@ -437,6 +437,31 @@ class FullPuzzleSolutionTests: XCTestCase {
 			XCTAssertIsSolved(solved)
 		}
 	}
+
+	func test__solve__puzzleRequiresJellyfishTechnique__solvesPuzzle() throws {
+		// A Jellyfish is basically a 4x4 variant of the x-wing pattern.
+		// Unlike an x-wing, it is OK if one of the rows/columns are empty
+		// Specifically for this puzzle, the 7s, 8s and 9s all create a Jellyfish
+		// pattern right from the starting state
+
+		let puzzle = try Puzzle(dsl: """
+			-1- --- -2-
+			3-- --- --7
+			--4 5-2 1--
+
+			--6 4-5 2--
+			--- --- ---
+			--1 3-6 5--
+
+			--5 6-4 3--
+			6-- --- --2
+			-8- --- -9-
+			"""
+		)
+
+		let solved = solve(puzzle)
+		XCTAssertIsSolved(solved)
+	}
 }
 
 extension FullPuzzleSolutionTests {
