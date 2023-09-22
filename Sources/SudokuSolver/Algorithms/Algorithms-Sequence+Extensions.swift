@@ -13,5 +13,7 @@ public extension Array where Element == any Algorithm {
 		PointingTriple(),
 		NakedTriple(),
 		TwoStringKite(),
+		Swordfish(),
+		Jellyfish(),
 	] }
 }

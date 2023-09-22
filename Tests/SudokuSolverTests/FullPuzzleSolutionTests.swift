@@ -323,6 +323,22 @@ class FullPuzzleSolutionTests: XCTestCase {
 		-1- --8 -5-
 		--6 --4 1--
 		--- 1-- 8-6
+
+		\(separator)
+
+		// This requires a Swordfish
+		2-- -7- 1-3
+		-7- -8- -5-
+		3-- --6 ---
+
+		--6 --- ---
+		91- -5- -28
+		--- --- 5--
+
+		--- 3-- --4
+		-2- -9- -7-
+		5-4 -1- --6
+
 		"""
 
 		for puzzle in try parse(dsl) {
@@ -430,6 +446,33 @@ class FullPuzzleSolutionTests: XCTestCase {
 			2-- --1 ---
 			--7 -3- -54
 
+			\(separator)
+
+			-14 8-7 ---
+			--- 4-- -3-
+			8-- 19- ---
+
+			52- -3- ---
+			--7 --- 1--
+			--- -6- -57
+
+			--- -72 --4
+			--- --- -6-
+			--- 9-8 3--
+
+			\(separator)
+
+			-6- 4-8 -2-
+			--5 3-- ---
+			--8 -7- --1
+
+			--- --- -73
+			8-4 --- 9-5
+			5-- --- ---
+
+			9-- -3- 6--
+			--- --6 4--
+			-4- 8-5 -3-
 			"""
 
 		for puzzle in try parse(dsl) {
