@@ -74,7 +74,7 @@ struct Fish {
 				return cellsToAffect
 			}
 
-			let recursiveSolve = resolve(candidate: nextCandidate, groups: groups.dropFirst(index).dropFirst(), crossingGroups: crossingGroups)
+			let recursiveSolve = resolve(candidate: nextCandidate, groups: groups.drop { $0.position <= group.position }, crossingGroups: crossingGroups)
 			if recursiveSolve.isNotEmpty {
 				return recursiveSolve
 			}
