@@ -517,12 +517,12 @@ extension FullPuzzleSolutionTests {
 
 extension Array where Element == Puzzle {
 	static let separator = "-----------"
-	init(dsl: String) throws {
+	init(dsl: String, pencilMarked: Bool = false) throws {
 		self = try dsl
 			.components(separatedBy: Self.separator)
 			.map { $0.trimmingCharacters(in: .whitespaces) }
 			.filter { !$0.isEmpty }
-			.map { try Puzzle(dsl:$0) }
+			.map { try Puzzle(dsl:$0, pencilMarked: pencilMarked) }
 	}
 
 	public init(stringLiteral value: StringLiteralType) {

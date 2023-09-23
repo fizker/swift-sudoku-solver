@@ -33,6 +33,14 @@ public struct Coordinate: Equatable {
 	}
 }
 
+extension Array where Element == Coordinate {
+	init(rows: [Int], columns: [Int]) throws {
+		self = try rows.flatMap { row in
+			try columns.map { try Coordinate(row: row, column: $0) }
+		}
+	}
+}
+
 public struct Cell: Equatable, CustomStringConvertible, CustomDebugStringConvertible {
 	public var value: Int? {
 		didSet {

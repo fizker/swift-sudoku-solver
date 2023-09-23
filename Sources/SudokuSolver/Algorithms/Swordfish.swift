@@ -9,11 +9,6 @@ struct Swordfish: Algorithm {
 	}
 }
 
-#warning("""
-this might not be good enough. for one, the two cells on row 1 might match a
-candidate on rows 234 as well as 345, if the stars align
-""")
-
 struct Fish {
 	let puzzle: Puzzle
 	let type: FishType

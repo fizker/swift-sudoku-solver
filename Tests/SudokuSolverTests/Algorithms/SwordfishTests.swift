@@ -112,4 +112,101 @@ final class SwordfishTests: XCTestCase {
 			XCTAssertFalse(cell.pencilMarks.contains(4))
 		}
 	}
+
+	func test__patternsFromGoodSudoku__swordfishIsFixed() async throws {
+		let prepAlgos: [Algorithm] = [
+			NakedPair(),
+			HiddenPair(),
+		]
+
+		let dsls: [(dsl: String, digit: Int, rows: [Int], columns: [Int])] = [
+			(
+				"""
+				--6 5-- -4-
+				-84 2-- ---
+				2-- -6- --1
+
+				--- -2- 357
+				6-- --- --9
+				725 -1- ---
+
+				9-- 78- --6
+				--- --- 83-
+				-6- --2 ---
+				""",
+				digit: 3, rows: [1,2,9], columns: [1,5,9]
+			),
+			(
+				"""
+				8-6 4-7 1-3
+				--- 165 7--
+				--- -8- ---
+
+				64- -3- -71
+				--8 7-1 6--
+				1-- -46 -9-
+
+				--- --4 ---
+				--2 6-8 ---
+				5-4 -1- 9-7
+				""",
+				digit: 9, rows: [1,5,8], columns: [1,2,5]
+			),
+			(
+				"""
+				--7 -2- --9
+				--4 --3 --2
+				215 --- ---
+
+				84- 5-- 637
+				--- 3-- 5--
+				-53 4-6 928
+
+				--- 2-- -86
+				5-- 9-- 7--
+				-7- -3- 295
+				""",
+				digit: 4, rows: [3,5,8], columns: [5,8,9]
+			),
+			(
+				"""
+				6-2 -48 9--
+				8-- 9-- 642
+				--- 6-2 -38
+
+				763 -2- 89-
+				-2- 879 -6-
+				--8 -6- 527
+
+				284 196 ---
+				--6 --- 289
+				--9 28- 416
+				""",
+				digit: 1, rows: [2,3,5], columns: [3,5,7]
+			),
+			/*
+			(
+				"""
+				<#dsl#>
+				""",
+				digit: <#digit#>, rows: [<#rows#>], columns: [<#columns#>]
+			),
+			*/
+		]
+
+		for test in dsls {
+			let puzzle = try Puzzle(dsl: test.dsl, pencilMarked: true) |> prepAlgos.solve(_:)
+			let solved = algo(puzzle)
+			let coords = try [Coordinate](rows: test.rows, columns: test.columns)
+			for cell in solved.cells.filter(notAt: coords) where test.rows.contains(cell.row) || test.columns.contains(cell.column) {
+				XCTAssertFalse(cell.pencilMarks.contains(test.digit), cell.debugDescription)
+			}
+		}
+	}
+
+	var separator: String { Array<Puzzle>.separator }
+
+	func parse(_ dsl: String) throws -> Array<Puzzle> {
+		try .init(dsl: dsl, pencilMarked: true)
+	}
 }
