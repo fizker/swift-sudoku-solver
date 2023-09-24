@@ -1,3 +1,4 @@
+/// - Complexity: O(1.175.739.966).
 struct Swordfish: Algorithm {
 	static let name = "Swordfish"
 
@@ -16,6 +17,7 @@ struct Fish {
 	let rows: [Row]
 	let columns: [Column]
 
+	/// - Complexity: O(342)
 	init(puzzle: Puzzle, type: FishType) {
 		self.puzzle = puzzle
 		self.type = type
@@ -25,6 +27,7 @@ struct Fish {
 		self.columns = puzzle.columns
 	}
 
+	/// - Complexity: O(6(756 + 9(18+10.886.355+21))) for Swordfish, O(5(756 + 9(18+13.063.626+20)))
 	func resolve(primaryGroupPath: KeyPath<Fish, [some Container]>, secondaryGroupPath: KeyPath<Fish, [some Container]>) -> Puzzle? {
 		let primaryGroups = self[keyPath: primaryGroupPath]
 		let groupsToAffect = self[keyPath: secondaryGroupPath]
@@ -32,20 +35,26 @@ struct Fish {
 		let requiredCandidateCount = Set(2...type.requiredMatches)
 		let endIndex = primaryGroups.endIndex - type.requiredMatches
 
+		// O(6n) for Swordfish, O(5n) for Jellyfish
 		for index in primaryGroups.startIndex..<endIndex {
 			let group = primaryGroups[index]
+			// O(738 + 9 + 9log9) -> O(756)
 			let candidates = group.candidateCount.filter { requiredCandidateCount.contains($0.count) }.sorted(by: \.count).reversed()
 
+			// O(9n), OS(9(18+10.886.355+21)), OJ(9(18+13.063.626+20))
 			for candidate in candidates {
+				// O(18)
 				let fish = FishCandidate(groupType: group.type, fishType: type, digit: candidate.value)
 					.formingCandidate(with: group)!
 
+				// O(10.886.355) for Swordfish, O(13.063.626) for Jellyfish
 				let cellsToAffect = resolve(candidate: fish, groups: primaryGroups.dropFirst(index).dropFirst(), crossingGroups: groupsToAffect)
 
 				guard cellsToAffect.isNotEmpty
 				else { continue }
 
 				var puzzle = puzzle
+				// O(21) for Swordfish, O(20) for Jellyfish
 				for var cell in cellsToAffect {
 					cell.pencilMarks.remove(candidate.value)
 					puzzle.update(cell)
@@ -57,18 +66,32 @@ struct Fish {
 		return nil
 	}
 
+	/// - Complexity: O(10.886.355) for Swordfish, O(13.063.626) for Jellyfish.
 	private func resolve(candidate: FishCandidate, groups: ArraySlice<some Container>, crossingGroups: [some Container]) -> [Cell] {
+		// O(n(45 + m) + m) where n is group size and m is the complexity result of this function for n-1
+		// If n is 1, this is O(18+27) -> O(45), O(54) for Jellyfish
+		// - n: 2, O(2(45) + (45)) -> O(135), O(162) for J
+		// - n: 3, O(3(45 + 2g) + 2g) -> O(3(180) + 135) -> O(675), O(810) for J
+		// - n: 4, O(4(45 + 675) + 675) -> O(3.555), O(4.266) for J
+		// - n: 5, O(5(45 + 3.555) + 3.555) -> O(21.555), O(25.866) for J
+		// - n: 6, O(6(45 + 21.555) + 21.555) -> O(151.155), O(181.386) for J
+		// - n: 7, O(7(45 + 151.155) + 151.155) -> O(1.209.555), O(1.451.466) for J
+		// - n: 8, O(8(45 + 1.209.555) + 1.209.555) -> O(10.886.355), O(13.063.626) for J
+		// O(8n) where n is 8 or less
 		for index in groups.indices {
 			let group = groups[index]
 
+			// O(18)
 			guard let nextCandidate = candidate.formingCandidate(with: group)
 			else { continue }
 
+			// O(27) for Swordfish, O(36) for jellyfish.
 			let cellsToAffect = nextCandidate.affectedCells(in: crossingGroups)
 			if cellsToAffect.isNotEmpty {
 				return cellsToAffect
 			}
 
+			// O(n + m). groups will have size 7-
 			let recursiveSolve = resolve(candidate: nextCandidate, groups: groups.drop { $0.position <= group.position }, crossingGroups: crossingGroups)
 			if recursiveSolve.isNotEmpty {
 				return recursiveSolve
@@ -95,6 +118,8 @@ struct Fish {
 		var positionInGroups: Set<Int> = []
 
 		/// Returns whether the candidate conforms to the rules of the ``fishType``.
+		///
+		/// - Complexity: O(1).
 		var isValid: Bool {
 			switch groupType {
 			case .row, .column:
@@ -127,6 +152,11 @@ struct Fish {
 			}
 		}
 
+		/// Adds the cell to the candidate.
+		///
+		/// If the cell does not have the digit of the candidate, the cell will not be added.
+		///
+		/// - Complexity: O(1).
 		mutating func add(_ cell: Cell) {
 			guard cell.pencilMarks.contains(digit)
 			else { return }
@@ -143,18 +173,22 @@ struct Fish {
 		///
 		/// But if the group would have 3 columns where only one overlapped the already known column,
 		/// this would then match 4 columns which is too much and thus return nil.
+		///
+		/// - Complexity: O(18).
 		func formingCandidate(with group: some Container) -> FishCandidate? {
 			guard group.type == groupType
 			else { return nil }
 
 			let requiredMatches = fishType.requiredMatches
 
+			// O(9)
 			let candidateCells = group.cells.filter { $0.pencilMarks.contains(digit) }
 
 			guard 2 <= candidateCells.count && candidateCells.count <= requiredMatches
 			else { return nil }
 
 			var newCandidate = self
+			// O(9)
 			for cell in candidateCells {
 				newCandidate.add(cell)
 			}
@@ -168,12 +202,17 @@ struct Fish {
 		/// Returns the cells that would be affected by this candidate.
 		///
 		/// If ``isValid`` is false, this always returns no cells.
+		///
+		/// - Complexity: O(9`m`) where `m` is the order of the Fish, eg. it is 3 for a Swordfish and 4 for a Jellyfish. See ``FishType`` for more details on Fish order.
 		func affectedCells(in crossingGroups: [some Container]) -> [Cell] {
 			guard isValid
 			else { return [] }
 
+			// O(`m`n) where `m` is 3 for Swordfish and 4 for Jellyfish.
 			return positionInGroups.flatMap { index in
 				let group = crossingGroups[index]
+
+				// O(9)
 				return group.cells.filter {
 					$0.pencilMarks.contains(digit) && !groups.contains($0[keyPath: cellPrimaryKeypath])
 				}

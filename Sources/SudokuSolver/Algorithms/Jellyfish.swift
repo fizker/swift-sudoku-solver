@@ -1,3 +1,4 @@
+/// - Complexity: O(1.175.737.662).
 struct Jellyfish: Algorithm {
 	static let name = "Jellyfish"
 
