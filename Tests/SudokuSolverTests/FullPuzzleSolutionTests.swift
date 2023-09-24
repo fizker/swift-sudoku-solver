@@ -323,6 +323,22 @@ class FullPuzzleSolutionTests: XCTestCase {
 		-1- --8 -5-
 		--6 --4 1--
 		--- 1-- 8-6
+
+		\(separator)
+
+		// This requires a Swordfish
+		2-- -7- 1-3
+		-7- -8- -5-
+		3-- --6 ---
+
+		--6 --- ---
+		91- -5- -28
+		--- --- 5--
+
+		--- 3-- --4
+		-2- -9- -7-
+		5-4 -1- --6
+
 		"""
 
 		for puzzle in try parse(dsl) {
@@ -430,12 +446,64 @@ class FullPuzzleSolutionTests: XCTestCase {
 			2-- --1 ---
 			--7 -3- -54
 
+			\(separator)
+
+			-14 8-7 ---
+			--- 4-- -3-
+			8-- 19- ---
+
+			52- -3- ---
+			--7 --- 1--
+			--- -6- -57
+
+			--- -72 --4
+			--- --- -6-
+			--- 9-8 3--
+
+			\(separator)
+
+			-6- 4-8 -2-
+			--5 3-- ---
+			--8 -7- --1
+
+			--- --- -73
+			8-4 --- 9-5
+			5-- --- ---
+
+			9-- -3- 6--
+			--- --6 4--
+			-4- 8-5 -3-
 			"""
 
 		for puzzle in try parse(dsl) {
 			let solved = solve(puzzle)
 			XCTAssertIsSolved(solved)
 		}
+	}
+
+	func test__solve__puzzleRequiresJellyfishTechnique__solvesPuzzle() throws {
+		// A Jellyfish is basically a 4x4 variant of the x-wing pattern.
+		// Unlike an x-wing, it is OK if one of the rows/columns are empty
+		// Specifically for this puzzle, the 7s, 8s and 9s all create a Jellyfish
+		// pattern right from the starting state
+
+		let puzzle = try Puzzle(dsl: """
+			-1- --- -2-
+			3-- --- --7
+			--4 5-2 1--
+
+			--6 4-5 2--
+			--- --- ---
+			--1 3-6 5--
+
+			--5 6-4 3--
+			6-- --- --2
+			-8- --- -9-
+			"""
+		)
+
+		let solved = solve(puzzle)
+		XCTAssertIsSolved(solved)
 	}
 }
 
@@ -449,12 +517,12 @@ extension FullPuzzleSolutionTests {
 
 extension Array where Element == Puzzle {
 	static let separator = "-----------"
-	init(dsl: String) throws {
+	init(dsl: String, pencilMarked: Bool = false) throws {
 		self = try dsl
 			.components(separatedBy: Self.separator)
 			.map { $0.trimmingCharacters(in: .whitespaces) }
 			.filter { !$0.isEmpty }
-			.map { try Puzzle(dsl:$0) }
+			.map { try Puzzle(dsl:$0, pencilMarked: pencilMarked) }
 	}
 
 	public init(stringLiteral value: StringLiteralType) {

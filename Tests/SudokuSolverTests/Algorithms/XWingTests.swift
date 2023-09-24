@@ -52,7 +52,9 @@ final class XWingTests: XCTestCase {
 	}
 
 	func test__puzzleHasXWing_XWingIsTriggeredOnColumns__pencilMarksAreUpdated() async throws {
-		let nonXWing = [Algorithm].all.filter { $0.name != algo.name }
+		let nonXWing: [any Algorithm] = [
+			NakedSingle(), HiddenSingle(), NakedPair(), HiddenPair(),
+		]
 
 		// The X-wing is on 5 between R2+7 C2+6
 		let rawPuzzle = try Puzzle(dsl: """
@@ -74,8 +76,12 @@ final class XWingTests: XCTestCase {
 
 		XCTAssertFalse(puzzle.isSolved)
 
-		let solved = algo(puzzle)
+		let firstSolve = algo(puzzle)
 
-		XCTAssertEqual(solved.cells.cell(at: try Coordinate(row: 2, column: 1)).pencilMarks, [8], solved.debugDescription)
+		XCTAssertEqual(firstSolve.cells.cell(at: try Coordinate(row: 7, column: 6)).pencilMarks, [5,6], firstSolve.debugDescription)
+
+		let secondSolve = algo(firstSolve)
+
+		XCTAssertEqual(secondSolve.cells.cell(at: try Coordinate(row: 2, column: 1)).pencilMarks, [8], secondSolve.debugDescription)
 	}
 }
