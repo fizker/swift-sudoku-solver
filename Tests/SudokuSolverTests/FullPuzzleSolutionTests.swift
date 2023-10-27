@@ -154,7 +154,7 @@ class FullPuzzleSolutionTests: XCTestCase {
 		)
 	}
 
-	func test__solve__puzzlesRequiringYWing__puzzlesAreSolved() throws {
+	func test__YWing__1() throws {
 		XCTAssertCanSolve("""
 		// This harbors a y-wing
 		--1 --- ---
@@ -168,7 +168,9 @@ class FullPuzzleSolutionTests: XCTestCase {
 		--- 4-- --7
 		--- --- ---
 		""")
+	}
 
+	func test__YWing__2() throws {
 		// This harbors a y-wing
 		XCTAssertCanSolve("""
 		-2- 1-9 -6-
@@ -183,7 +185,9 @@ class FullPuzzleSolutionTests: XCTestCase {
 		--7 -9- 14-
 		-9- 4-2 -3-
 		""")
+	}
 
+	func test__YWing__3() throws {
 		// This eventually has a y-wing between R2C7 R3C5 R2C9 between 138
 		XCTAssertCanSolve("""
 		--- 82- --9
@@ -198,7 +202,9 @@ class FullPuzzleSolutionTests: XCTestCase {
 		4-- --- ---
 		6-- -93 5--
 		""")
+	}
 
+	func test__YWing__4() throws {
 		// This harbors a y-wing
 		XCTAssertCanSolve("""
 		--6 9-- ---
@@ -236,7 +242,7 @@ class FullPuzzleSolutionTests: XCTestCase {
 		)
 	}
 
-	func test__solve__variousPuzzles__puzzlesAreSolved() throws {
+	func test__unknown_1() throws {
 		XCTAssertCanSolve("""
 		5-- 8-- -9-
 		-9- --- 7--
@@ -250,7 +256,9 @@ class FullPuzzleSolutionTests: XCTestCase {
 		3-- 1-- 4--
 		--- -3- ---
 		""")
+	}
 
+	func test__unknown_2() {
 		XCTAssertCanSolve("""
 		6-- 87- 3--
 		-5- --- --4
@@ -264,7 +272,9 @@ class FullPuzzleSolutionTests: XCTestCase {
 		2-- --- -7-
 		--7 -25 --1
 		""")
+	}
 
+	func test__unknown_3() {
 		// This one gets an avoidable rectangle between R4+8 C7+8
 		XCTAssertCanSolve("""
 		--- -82 3-7
@@ -279,7 +289,9 @@ class FullPuzzleSolutionTests: XCTestCase {
 		7-- --- ---
 		528 67- ---
 		""")
+	}
 
+	func test__2StringKit() {
 		// This includes a 2-string kite
 		XCTAssertCanSolve("""
 		--5 --- -6-
@@ -294,7 +306,9 @@ class FullPuzzleSolutionTests: XCTestCase {
 		--6 --4 1--
 		--- 1-- 8-6
 		""")
+	}
 
+	func test__Swordfish() {
 		// This requires a Swordfish
 		XCTAssertCanSolve("""
 		2-- -7- 1-3
@@ -312,7 +326,7 @@ class FullPuzzleSolutionTests: XCTestCase {
 		)
 	}
 
-	func test__fromGoodSudoku() async throws {
+	func test__fromGoodSudoku__1() async throws {
 		XCTAssertCanSolve("""
 			// This dies on an X-wing on 8 in R1+6 C1+4, clearing the rows
 			--- -7- 5-3
@@ -327,7 +341,9 @@ class FullPuzzleSolutionTests: XCTestCase {
 			-8- 3-- -72
 			2-4 -1- ---
 		""")
+	}
 
+	func test__fromGoodSudoku__2() {
 		XCTAssertCanSolve("""
 			9-- 3-- -46
 			735 4-- ---
@@ -341,7 +357,9 @@ class FullPuzzleSolutionTests: XCTestCase {
 			--- --1 46-
 			84- --5 --3
 		""")
+	}
 
+	func test__fromGoodSudoku__3() {
 		XCTAssertCanSolve("""
 			--- 6-- 4--
 			--6 -24 ---
@@ -355,7 +373,9 @@ class FullPuzzleSolutionTests: XCTestCase {
 			--5 34- 8--
 			--3 --8 -1-
 		""")
+	}
 
+	func test__fromGoodSudoku__4() {
 		XCTAssertCanSolve("""
 			--- 6-- --8
 			2-8 --- ---
@@ -369,7 +389,9 @@ class FullPuzzleSolutionTests: XCTestCase {
 			--- --5 1-3
 			6-- --2 ---
 		""")
+	}
 
+	func test__fromGoodSudoku__5() {
 		XCTAssertCanSolve("""
 			--2 --7 -1-
 			--- --4 --7
@@ -383,7 +405,9 @@ class FullPuzzleSolutionTests: XCTestCase {
 			6-- 7-2 ---
 			--- 6-- 9--
 		""")
+	}
 
+	func test__fromGoodSudoku__6() {
 		XCTAssertCanSolve("""
 			5-- 7-- --2
 			-3- --- 19-
@@ -397,7 +421,9 @@ class FullPuzzleSolutionTests: XCTestCase {
 			-4- --- -6-
 			6-- --1 --8
 		""")
+	}
 
+	func test__fromGoodSudoku__7() {
 		XCTAssertCanSolve("""
 			39- -14 2--
 			--- 2-- --3
@@ -411,7 +437,9 @@ class FullPuzzleSolutionTests: XCTestCase {
 			2-- --1 ---
 			--7 -3- -54
 		""")
+	}
 
+	func test__fromGoodSudoku__8() {
 		XCTAssertCanSolve("""
 			-14 8-7 ---
 			--- 4-- -3-
@@ -425,7 +453,9 @@ class FullPuzzleSolutionTests: XCTestCase {
 			--- --- -6-
 			--- 9-8 3--
 		""")
+	}
 
+	func test__fromGoodSudoku__9() {
 		XCTAssertCanSolve("""
 			-6- 4-8 -2-
 			--5 3-- ---
