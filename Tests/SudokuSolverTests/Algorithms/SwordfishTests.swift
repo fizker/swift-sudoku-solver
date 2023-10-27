@@ -203,10 +203,4 @@ final class SwordfishTests: XCTestCase {
 			}
 		}
 	}
-
-	var separator: String { Array<Puzzle>.separator }
-
-	func parse(_ dsl: String) throws -> Array<Puzzle> {
-		try .init(dsl: dsl, pencilMarked: true)
-	}
 }

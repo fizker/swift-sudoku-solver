@@ -184,10 +184,4 @@ final class JellyfishTests: XCTestCase {
 			XCTAssertEqual([], failingCells, test.dsl)
 		}
 	}
-
-	var separator: String { Array<Puzzle>.separator }
-
-	func parse(_ dsl: String) throws -> Array<Puzzle> {
-		try .init(dsl: dsl, pencilMarked: true)
-	}
 }
