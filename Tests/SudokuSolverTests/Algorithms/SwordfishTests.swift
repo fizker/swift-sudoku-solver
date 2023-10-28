@@ -32,7 +32,7 @@ final class SwordfishTests: XCTestCase {
 			XCTAssertTrue(cell.pencilMarks.contains(8))
 		}
 
-		let solved = algo(puzzle)
+		let solved = try running(algo, on: puzzle)
 
 		for cell in solved.cells.filter(at: cellsToUpdate) {
 			XCTAssertFalse(cell.pencilMarks.contains(8))
@@ -53,7 +53,7 @@ final class SwordfishTests: XCTestCase {
 		485 -71 36-
 		6-3 --- --1
 		""", pencilMarked: true)
-			|> HiddenPair().callAsFunction(_:)
+			|> { try running(HiddenPair(), on: $0) }
 
 		let cellsToUpdate = try [
 			Coordinate(row: 3, column: 4),
@@ -68,7 +68,7 @@ final class SwordfishTests: XCTestCase {
 			XCTAssertTrue(cell.pencilMarks.contains(9))
 		}
 
-		let solved = algo(puzzle)
+		let solved = try running(algo, on: puzzle)
 
 		for cell in solved.cells.filter(at: cellsToUpdate) {
 			XCTAssertFalse(cell.pencilMarks.contains(9))
@@ -106,7 +106,7 @@ final class SwordfishTests: XCTestCase {
 			XCTAssertTrue(cell.pencilMarks.contains(4))
 		}
 
-		let solved = algo(puzzle)
+		let solved = try running(algo, on: puzzle)
 
 		for cell in solved.cells.filter(at: cellsToUpdate) {
 			XCTAssertFalse(cell.pencilMarks.contains(4))
@@ -196,7 +196,11 @@ final class SwordfishTests: XCTestCase {
 
 		for test in dsls {
 			let puzzle = try Puzzle(dsl: test.dsl, pencilMarked: true) |> prepAlgos.solve(_:)
-			let solved = algo(puzzle)
+			guard let solved = algo(puzzle)
+			else {
+				XCTFail("Could not find change in\n\(test.dsl)")
+				continue
+			}
 			let coords = try [Coordinate](rows: test.rows, columns: test.columns)
 			for cell in solved.cells.filter(notAt: coords) where test.rows.contains(cell.row) || test.columns.contains(cell.column) {
 				XCTAssertFalse(cell.pencilMarks.contains(test.digit), cell.debugDescription)

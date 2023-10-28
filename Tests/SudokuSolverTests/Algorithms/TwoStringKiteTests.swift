@@ -19,7 +19,7 @@ final class TwoStringKiteTests: XCTestCase {
 		-9- 1-- 846
 		""", pencilMarked: true)
 
-		let solved = algo(puzzle)
+		let solved = try running(algo, on: puzzle)
 
 		let coord = try Coordinate(row: 2, column: 6)
 
@@ -45,7 +45,7 @@ final class TwoStringKiteTests: XCTestCase {
 
 		XCTAssertEqual(puzzle.cells.cell(at: coord).pencilMarks, [1,2,6,9])
 
-		let solved = algo(puzzle)
+		let solved = try running(algo, on: puzzle)
 
 		XCTAssertEqual(solved.cells.cell(at: coord).pencilMarks, [1,6,9])
 	}
@@ -65,7 +65,7 @@ final class TwoStringKiteTests: XCTestCase {
 		--- --- --1
 		""", pencilMarked: true)
 
-		let solved = algo(puzzle)
+		let solved = try running(algo, on: puzzle)
 
 		let coords = try [
 			Coordinate(row: 1, column: 3),
@@ -99,6 +99,6 @@ final class TwoStringKiteTests: XCTestCase {
 
 		let solved = algo(puzzle)
 
-		XCTAssertEqual(solved, puzzle, solved.debugDescription)
+		XCTAssertNil(solved)
 	}
 }

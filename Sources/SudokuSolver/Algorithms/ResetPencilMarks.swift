@@ -4,7 +4,7 @@
 struct ResetPencilMarks: Algorithm {
 	static let name = "Reset Pencil Marks"
 
-	func callAsFunction(_ puzzle: Puzzle) -> Puzzle {
+	func callAsFunction(_ puzzle: Puzzle) -> Puzzle? {
 		var puzzle = puzzle
 
 		let allValues: Set<Int> = [1,2,3,4,5,6,7,8,9]
@@ -36,6 +36,6 @@ struct ResetPencilMarks: Algorithm {
 	/// Convenience func for executing this algorithm in a throw-away manner.
 	static func reset(_ puzzle: Puzzle) -> Puzzle {
 		let reset = ResetPencilMarks()
-		return reset(puzzle)
+		return reset(puzzle) ?? puzzle
 	}
 }

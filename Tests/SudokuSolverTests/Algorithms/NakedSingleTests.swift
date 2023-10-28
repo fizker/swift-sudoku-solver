@@ -2,7 +2,7 @@ import XCTest
 @testable import SudokuSolver
 
 class NakedSingleTests: XCTestCase {
-	let solve = NakedSingle()
+	let algo = NakedSingle()
 
 	func test__singleValueMissing__addsMissingValue() throws {
 		var puzzle = try Puzzle(dsl: """
@@ -21,7 +21,7 @@ class NakedSingleTests: XCTestCase {
 		)
 		puzzle.pencilMarkKnownValues()
 
-		let solved = solve(puzzle)
+		let solved = try running(algo, on: puzzle)
 
 		XCTAssertEqual(solved.description, """
 		831 764 259
@@ -56,7 +56,7 @@ class NakedSingleTests: XCTestCase {
 		)
 		puzzle.pencilMarkKnownValues()
 
-		let solved = solve(puzzle)
+		let solved = try running(algo, on: puzzle)
 
 		XCTAssertEqual(solved.description, """
 			831 764 259
@@ -90,7 +90,7 @@ class NakedSingleTests: XCTestCase {
 		""")
 		puzzle.pencilMarkKnownValues()
 
-		let solved = solve(puzzle)
+		let solved = try running(algo, on: puzzle)
 
 		XCTAssertEqual(solved.description, """
 		831 764 259
@@ -123,7 +123,7 @@ class NakedSingleTests: XCTestCase {
 		""")
 		puzzle.pencilMarkKnownValues()
 
-		let solved = solve(puzzle)
+		let solved = try running(algo, on: puzzle)
 
 		XCTAssertEqual(solved.description, """
 		831 764 259
@@ -157,7 +157,8 @@ class NakedSingleTests: XCTestCase {
 		)
 		puzzle.pencilMarkKnownValues()
 
-		let solved = solve(puzzle)
+		let solved = try running(algo, on: puzzle)
+
 		XCTAssertEqual(solved.description, """
 			57- 139 ---
 			-21 -87 --9

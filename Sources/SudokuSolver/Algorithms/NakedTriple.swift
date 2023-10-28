@@ -4,7 +4,7 @@
 struct NakedTriple: Algorithm {
 	static let name = "Naked triple"
 
-	func callAsFunction(_ puzzle: Puzzle) -> Puzzle {
+	func callAsFunction(_ puzzle: Puzzle) -> Puzzle? {
 		/// O(522 + 27n)
 		for container in puzzle.containers {
 			// O(9log9 + 9)
@@ -61,6 +61,6 @@ struct NakedTriple: Algorithm {
 			}
 		}
 
-		return puzzle
+		return nil
 	}
 }

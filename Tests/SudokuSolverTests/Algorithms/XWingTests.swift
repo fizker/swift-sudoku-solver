@@ -44,7 +44,7 @@ final class XWingTests: XCTestCase {
 			XCTAssertTrue(cell.pencilMarks.contains(8), cell.debugDescription)
 		}
 
-		let solved = algo(puzzle)
+		let solved = try running(algo, on: puzzle)
 
 		for cell in solved.cells.filter(at: cellsAffectedByXWing) {
 			XCTAssertFalse(cell.pencilMarks.contains(8), cell.debugDescription)
@@ -76,11 +76,11 @@ final class XWingTests: XCTestCase {
 
 		XCTAssertFalse(puzzle.isSolved)
 
-		let firstSolve = algo(puzzle)
+		let firstSolve = try running(algo, on: puzzle)
 
 		XCTAssertEqual(firstSolve.cells.cell(at: try Coordinate(row: 7, column: 6)).pencilMarks, [5,6], firstSolve.debugDescription)
 
-		let secondSolve = algo(firstSolve)
+		let secondSolve = try running(algo, on: firstSolve)
 
 		XCTAssertEqual(secondSolve.cells.cell(at: try Coordinate(row: 2, column: 1)).pencilMarks, [8], secondSolve.debugDescription)
 	}

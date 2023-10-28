@@ -12,8 +12,8 @@ public protocol Algorithm {
 	/// The puzzle is returned unchanged if the algorithm failed to find the required state.
 	///
 	/// - parameter puzzle: The puzzle to examine.
-	/// - returns: The puzzle after applying the algorithm. The puzzle might not have changed.
-	func callAsFunction(_ puzzle: Puzzle) -> Puzzle
+	/// - returns: The puzzle after applying the algorithm. If the algorithm did not effect a change, `nil` should be returned.
+	func callAsFunction(_ puzzle: Puzzle) -> Puzzle?
 }
 
 public extension Algorithm {

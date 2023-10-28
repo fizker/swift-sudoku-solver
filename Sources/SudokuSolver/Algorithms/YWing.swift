@@ -2,7 +2,7 @@
 struct YWing: Algorithm {
 	static let name = "Y-Wing"
 
-	func callAsFunction(_ puzzle: Puzzle) -> Puzzle {
+	func callAsFunction(_ puzzle: Puzzle) -> Puzzle? {
 		// O(n)
 		for cell in puzzle.cells where cell.pencilMarks.count == 2 {
 			// O(81) + O(20) for the loop
@@ -37,6 +37,6 @@ struct YWing: Algorithm {
 			}
 		}
 
-		return puzzle
+		return nil
 	}
 }

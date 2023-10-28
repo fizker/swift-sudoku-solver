@@ -30,7 +30,7 @@ final class HiddenPairTests: XCTestCase {
 		XCTAssertEqual(puzzle.cells.cell(at: pair[0]).pencilMarks, [1,4,6,7,9])
 		XCTAssertEqual(puzzle.cells.cell(at: pair[1]).pencilMarks, [3,4,6,7,9])
 
-		let solved = algo(puzzle)
+		let solved = try running(algo, on: puzzle)
 
 		for cell in solved.cells.filter(at: pair) {
 			XCTAssertEqual(cell.pencilMarks, [4,9])
@@ -74,7 +74,7 @@ final class HiddenPairTests: XCTestCase {
 		XCTAssertEqual(puzzle.cells.cell(at: pair[0]).pencilMarks, [2,3,6,7])
 		XCTAssertEqual(puzzle.cells.cell(at: pair[1]).pencilMarks, [2,3,5,6,7])
 
-		let solved = algo(puzzle)
+		let solved = try running(algo, on: puzzle)
 
 		for cell in solved.cells.filter(at: pair) {
 			XCTAssertEqual(cell.pencilMarks, [2,3])

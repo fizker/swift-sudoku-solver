@@ -9,7 +9,7 @@
 struct TwoStringKite: Algorithm {
 	static let name = "2-String Kite"
 
-	func callAsFunction(_ puzzle: Puzzle) -> Puzzle {
+	func callAsFunction(_ puzzle: Puzzle) -> Puzzle? {
 		// O(171 + 171 + 180)
 		let columns = puzzle.columns
 		let rows = puzzle.rows
@@ -62,6 +62,6 @@ struct TwoStringKite: Algorithm {
 			}
 		}
 
-		return puzzle
+		return nil
 	}
 }

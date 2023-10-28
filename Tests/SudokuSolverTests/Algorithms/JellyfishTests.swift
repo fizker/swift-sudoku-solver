@@ -30,7 +30,7 @@ final class JellyfishTests: XCTestCase {
 			XCTAssertTrue(cell.pencilMarks.contains(8))
 		}
 
-		let solved = algo(puzzle)
+		let solved = try running(algo, on: puzzle)
 
 		for cell in solved.cells.filter(at: cellsToUpdate) {
 			XCTAssertFalse(cell.pencilMarks.contains(8))
@@ -54,7 +54,7 @@ final class JellyfishTests: XCTestCase {
 		-2- -4- 769
 		""", pencilMarked: true)
 		// The puzzle has a naked pair of 35 that would remove 3's from two cells, thus exposing the Jelly Fish
-		|> NakedPair().callAsFunction(_:)
+		|> { try running(NakedPair(), on: $0) }
 
 		let cellsToUpdate = try [
 			Coordinate(row: 1, column: 9),
@@ -68,7 +68,7 @@ final class JellyfishTests: XCTestCase {
 			XCTAssertTrue(cell.pencilMarks.contains(3))
 		}
 
-		let solved = algo(puzzle)
+		let solved = try running(algo, on: puzzle)
 
 		for cell in solved.cells.filter(at: cellsToUpdate) {
 			XCTAssertFalse(cell.pencilMarks.contains(3))
@@ -175,7 +175,11 @@ final class JellyfishTests: XCTestCase {
 
 		for test in dsls {
 			let puzzle = try Puzzle(dsl: test.dsl, pencilMarked: true) |> prepAlgos.solve(_:)
-			let solved = algo(puzzle)
+			guard let solved = algo(puzzle)
+			else {
+				XCTFail("Could not find change in\n\(test.dsl)")
+				continue
+			}
 			let coords = try [Coordinate](rows: test.rows, columns: test.columns)
 			let failingCells = solved.cells.filter(notAt: coords)
 				.filter { cell in test.rows.contains(cell.row) || test.columns.contains(cell.column) }

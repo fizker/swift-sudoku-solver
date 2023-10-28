@@ -42,14 +42,14 @@ final class NakedPairTests: XCTestCase {
 		}
 		XCTAssertEqual(puzzle.cells.cell(at: affectedCell).pencilMarks, [6,7,8])
 
-		let afterFirstSolve = algo(puzzle)
+		let afterFirstSolve = try running(algo, on: puzzle)
 
 		for cell in cells(afterFirstSolve) {
 			XCTAssertEqual(cell.pencilMarks, [5,8])
 		}
 		XCTAssertEqual(afterFirstSolve.cells.cell(at: affectedCell).pencilMarks, [6,7,8])
 
-		let afterSecondSolve = algo(afterFirstSolve)
+		let afterSecondSolve = try running(algo, on: afterFirstSolve)
 
 		XCTAssertEqual(afterSecondSolve.cells.cell(at: affectedCell).pencilMarks, [6,7])
 	}

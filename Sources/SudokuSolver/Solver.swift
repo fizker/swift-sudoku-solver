@@ -13,8 +13,7 @@ public extension Array where Element == any Algorithm {
 
 		runloop: while !puzzle.isSolved {
 			solverloop: for algorithm in self {
-				let s = algorithm(puzzle)
-				if s != puzzle {
+				if let s = algorithm(puzzle) {
 					puzzle = s
 					continue runloop
 				}

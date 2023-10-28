@@ -37,7 +37,7 @@ final class YWingTests: XCTestCase {
 			XCTAssertTrue(cell.pencilMarks.contains(5))
 		}
 
-		let solved = algo(puzzle)
+		let solved = try running(algo, on: puzzle)
 
 		for cell in solved.cells.filter(at: cellsAffected) {
 			XCTAssertFalse(cell.pencilMarks.contains(5))

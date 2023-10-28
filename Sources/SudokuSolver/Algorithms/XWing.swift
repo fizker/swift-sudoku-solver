@@ -2,10 +2,9 @@
 struct XWing: Algorithm {
 	static let name = "X-Wing"
 
-	func callAsFunction(_ puzzle: Puzzle) -> Puzzle {
+	func callAsFunction(_ puzzle: Puzzle) -> Puzzle? {
 		resolveXWing(puzzle: puzzle, primaryContainerPath: \.columns, secondaryContainerPath: \.rows, secondaryCellPositionPath: \.row) ??
-		resolveXWing(puzzle: puzzle, primaryContainerPath: \.rows, secondaryContainerPath: \.columns, secondaryCellPositionPath: \.column) ??
-		puzzle
+		resolveXWing(puzzle: puzzle, primaryContainerPath: \.rows, secondaryContainerPath: \.columns, secondaryCellPositionPath: \.column)
 	}
 
 	/// - Complexity: O(171 \* 2 + 9(738 + 18 + 9(9 + 9(9 + 90 + 14))) -> O(90.252).

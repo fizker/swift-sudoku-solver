@@ -35,7 +35,7 @@ final class PointingTripleTests: XCTestCase {
 			XCTAssertTrue(cell.pencilMarks.contains(3))
 		}
 
-		let solved = algo(puzzle)
+		let solved = try running(algo, on: puzzle)
 
 		for cell in solved.cells.filter(at: pointingTripleCells) {
 			XCTAssertTrue(cell.pencilMarks.contains(3))

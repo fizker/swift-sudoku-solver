@@ -4,7 +4,7 @@
 struct HiddenPair: Algorithm {
 	static let name = "Hidden pair"
 
-	func callAsFunction(_ puzzle: Puzzle) -> Puzzle {
+	func callAsFunction(_ puzzle: Puzzle) -> Puzzle? {
 		// O(522 + 27n)
 		for container in puzzle.containers {
 			// O(738)
@@ -40,6 +40,6 @@ struct HiddenPair: Algorithm {
 			}
 		}
 
-		return puzzle
+		return nil
 	}
 }

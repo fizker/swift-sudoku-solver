@@ -52,7 +52,7 @@ final class PointingPairTests: XCTestCase {
 		XCTAssertEqual(puzzle.cells.cell(at: pointingAt[0]).pencilMarks, [3,4,6,7,8])
 		XCTAssertEqual(puzzle.cells.cell(at: pointingAt[1]).pencilMarks, [4,6,7,8])
 
-		let solved = algo(puzzle)
+		let solved = try running(algo, on: puzzle)
 
 		XCTAssertEqual(solved.cells.cell(at: pointingAt[0]).pencilMarks, [3,4,6,7])
 		XCTAssertEqual(solved.cells.cell(at: pointingAt[1]).pencilMarks, [4,6,7])
@@ -89,7 +89,7 @@ final class PointingPairTests: XCTestCase {
 			puzzle.update(cell)
 		}
 
-		let solved = algo(puzzle)
+		let solved = try running(algo, on: puzzle)
 
 		for cell in solved.cells.filter(at: pointingPair) {
 			XCTAssertTrue(cell.pencilMarks.contains(8), "These should be unmodified")
@@ -132,7 +132,7 @@ final class PointingPairTests: XCTestCase {
 
 		XCTAssertEqual(puzzle.cells.cell(at: pointedAt).pencilMarks, [ 1, 4, 5 ])
 
-		let solved = algo(puzzle)
+		let solved = try running(algo, on: puzzle)
 
 		XCTAssertEqual(solved.cells.cell(at: pointedAt).pencilMarks, [ 1, 4 ])
 	}

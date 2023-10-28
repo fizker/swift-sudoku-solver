@@ -8,7 +8,7 @@
 struct NakedPair: Algorithm {
 	static let name = "Naked pair"
 
-	func callAsFunction(_ puzzle: Puzzle) -> Puzzle {
+	func callAsFunction(_ puzzle: Puzzle) -> Puzzle? {
 		// O(n) where n is 81
 		for cell in puzzle.cells where cell.pencilMarks.count == 2 {
 			// Loop is O(3(m + 2n + p + p) where n is 81, p is 14 and m is 9
@@ -38,6 +38,6 @@ struct NakedPair: Algorithm {
 			}
 		}
 
-		return puzzle
+		return nil
 	}
 }

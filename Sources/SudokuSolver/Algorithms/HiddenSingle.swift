@@ -6,7 +6,7 @@
 struct HiddenSingle: Algorithm {
 	static let name = "Hidden single"
 
-	func callAsFunction(_ puzzle: Puzzle) -> Puzzle {
+	func callAsFunction(_ puzzle: Puzzle) -> Puzzle? {
 		// O(522 + 27n)
 		for container in puzzle.containers {
 			// O(c+cn)
@@ -22,6 +22,6 @@ struct HiddenSingle: Algorithm {
 			return puzzle.updating(cell)
 		}
 
-		return puzzle
+		return nil
 	}
 }

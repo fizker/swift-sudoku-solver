@@ -2,11 +2,10 @@
 struct Swordfish: Algorithm {
 	static let name = "Swordfish"
 
-	func callAsFunction(_ puzzle: Puzzle) -> Puzzle {
+	func callAsFunction(_ puzzle: Puzzle) -> Puzzle? {
 		let fish = Fish(puzzle: puzzle, type: .swordfish)
 		return fish.resolve(primaryGroupPath: \.rows, secondaryGroupPath: \.columns)
 		?? fish.resolve(primaryGroupPath: \.columns, secondaryGroupPath: \.rows)
-		?? puzzle
 	}
 }
 

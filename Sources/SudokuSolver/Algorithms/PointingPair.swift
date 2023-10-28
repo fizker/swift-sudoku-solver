@@ -2,7 +2,7 @@
 struct PointingPair: Algorithm {
 	static var name = "Pointing pair"
 
-	func callAsFunction(_ puzzle: Puzzle) -> Puzzle {
+	func callAsFunction(_ puzzle: Puzzle) -> Puzzle? {
 		solvePointingCombination(puzzle, requiredMatches: .two)
 	}
 }
@@ -19,7 +19,7 @@ enum RequiredPointingMatches {
 }
 
 /// - Complexity: O(522 + 27(738 + 9 + 9(9 + 2.187 + 90 + 18))) -> O(580.563).
-func solvePointingCombination(_ puzzle: Puzzle, requiredMatches: RequiredPointingMatches) -> Puzzle {
+func solvePointingCombination(_ puzzle: Puzzle, requiredMatches: RequiredPointingMatches) -> Puzzle? {
 	let containers = puzzle.containers
 	for container in containers {
 		let candidates = container.candidateCount
@@ -54,5 +54,5 @@ func solvePointingCombination(_ puzzle: Puzzle, requiredMatches: RequiredPointin
 		}
 	}
 
-	return puzzle
+	return nil
 }

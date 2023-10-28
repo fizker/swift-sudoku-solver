@@ -2,7 +2,7 @@ import XCTest
 @testable import SudokuSolver
 
 class HiddenSingleTests: XCTestCase {
-	let hiddenSingle = HiddenSingle()
+	let algo = HiddenSingle()
 
 	func test__singleNakedSingle__fillsInMissingNumber() throws {
 		var puzzle = try Puzzle(dsl: """
@@ -21,7 +21,7 @@ class HiddenSingleTests: XCTestCase {
 		)
 		puzzle.pencilMarkKnownValues()
 
-		let solved = hiddenSingle(puzzle)
+		let solved = try running(algo, on: puzzle)
 		XCTAssertIsSolved(solved)
 	}
 
@@ -42,7 +42,7 @@ class HiddenSingleTests: XCTestCase {
 		)
 		puzzle.pencilMarkKnownValues()
 
-		let solved = hiddenSingle(puzzle)
+		let solved = try running(algo, on: puzzle)
 		XCTAssertEqual(solved.description, """
 			-5- 6-9 3--
 			--9 --- ---
@@ -76,7 +76,7 @@ class HiddenSingleTests: XCTestCase {
 		)
 		puzzle.pencilMarkKnownValues()
 
-		let solved = hiddenSingle(puzzle)
+		let solved = try running(algo, on: puzzle)
 		XCTAssertEqual(solved.description, """
 			-5- 6-9 3--
 			--9 --- ---

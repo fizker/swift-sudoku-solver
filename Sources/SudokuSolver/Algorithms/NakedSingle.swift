@@ -8,12 +8,12 @@
 struct NakedSingle: Algorithm {
 	static let name = "Naked single"
 
-	func callAsFunction(_ puzzle: Puzzle) -> Puzzle {
+	func callAsFunction(_ puzzle: Puzzle) -> Puzzle? {
 		for var cell in puzzle.cells where cell.pencilMarks.count == 1 {
 			cell.value = cell.pencilMarks.first!
 			return puzzle.updating(cell)
 		}
 
-		return puzzle
+		return nil
 	}
 }

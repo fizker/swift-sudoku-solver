@@ -32,7 +32,7 @@ final class NakedTripleTests: XCTestCase {
 			XCTAssertEqual(cell.pencilMarks.subtracting([1,3,9]), [], cell.debugDescription)
 		}
 
-		let solved = algo(puzzle)
+		let solved = try running(algo, on: puzzle)
 
 		for coord in triples {
 			XCTAssertEqual(puzzle.cells.cell(at: coord), solved.cells.cell(at: coord))
@@ -84,7 +84,7 @@ final class NakedTripleTests: XCTestCase {
 		XCTAssertEqual(puzzle.cells.cell(at: triples[1]).pencilMarks, [3,9])
 		XCTAssertEqual(puzzle.cells.cell(at: triples[2]).pencilMarks, [1,9])
 
-		let solved = algo(puzzle)
+		let solved = try running(algo, on: puzzle)
 
 		for coord in triples {
 			XCTAssertEqual(puzzle.cells.cell(at: coord), solved.cells.cell(at: coord))
