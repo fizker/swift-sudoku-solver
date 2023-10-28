@@ -1,11 +1,11 @@
 /// A 2-string kite eliminates pencil marks.
 ///
-/// It works by identifying a box where there are only two candidates (A1, B1) for a digit, and where these two
-/// candidates does not share row or column. They both however must be part of a second two-candidate pair (A2, B2 respectively).
+/// It works by identifying a column where there are only two candidates (C1, C2) for a digit and a row with only
+/// two candidates for the same digit (R1, R2). If one of the row-candidates share a box with one of the
+/// column-candidates, (C1 shares a box with R1), then the cell that sees the other two cells cannot contain the digit,
+/// or both C1 and R1 would be forced to contain the digit.
 ///
-/// Any cells that then see both of their counterparts cannot have the value, since that would force both A1 and B1 to have the same value.
-///
-/// - Complexity: O(522 + 9(738 + 9 + 9(9 + 3.024 + 18(18(162 + 14 + 14))))) -> O(5.239.278	) for a reguler 9x9 sudoku puzzle.
+/// - Complexity: O(522 + 9(738 + 9 + 9(9 + 2(9(9 + 2 + 162 + 7+ 7))))) -> O(280.620) for a reguler 9x9 sudoku puzzle.
 struct TwoStringKite: Algorithm {
 	static let name = "2-String Kite"
 
@@ -16,37 +16,42 @@ struct TwoStringKite: Algorithm {
 		let boxes = puzzle.boxes
 
 		// O(9n)
-		for box in boxes {
+		for column in columns {
 			// O(738 + 9), returns 9
-			let twoCandidates = box.candidateCount.filter { $0.count == 2 }.map(\.value)
+			let twoCandidates = column.candidateCount.filter { $0.count == 2 }.map(\.value)
 
 			// O(9)
 			for digit in twoCandidates {
 				// O(9)
-				let cells = box.cells.filter { $0.pencilMarks.contains(digit) }
+				let cells = column.cells.filter { $0.pencilMarks.contains(digit) }
 
-				// O(2 * 1.512)
-				let firstPair = cellsBeingSecondCandidate(firstCandidate: cells[0], digit: digit, rows: rows, columns: columns)
-				let secondPair = cellsBeingSecondCandidate(firstCandidate: cells[1], digit: digit, rows: rows, columns: columns)
+				// O(2)
+				for cell in cells {
+					let box = boxes[cell.box - 1]
+					// O(9)
+					for otherBoxCell in box.cells where otherBoxCell.pencilMarks.contains(digit) && cell.coordinate != otherBoxCell.coordinate {
+						let row = rows[otherBoxCell.row - 1]
+						// O(9)
+						let rowCells = row.cells.filter { $0.pencilMarks.contains(digit) && $0.column != otherBoxCell.column }
+						guard rowCells.count == 1
+						else { continue }
 
-				guard firstPair.isNotEmpty && secondPair.isNotEmpty
-				else { continue }
+						// O(2)
+						let otherColumnCell = cells.first { $0.row != cell.row }!
+						let otherRowCell = rowCells[0]
 
-				// O(18)
-				for firstLeg in firstPair {
-					// O(18)
-					for secondLeg in secondPair {
-						// O(81 * 2), returns 14
-						let pointingCells = puzzle.cells(pointingAt: firstLeg, secondLeg)
-						// O(14)
-						let cellsToUpdate = pointingCells
-							.filter { $0.pencilMarks.contains(digit) }
+						// O(81*2)
+						let cellsToUpdate = puzzle.cells(pointingAt: [
+							otherColumnCell,
+							otherRowCell,
+						])
 
-						guard cellsToUpdate.isNotEmpty
+						// O(7)
+						guard cellsToUpdate.contains(where: { $0.pencilMarks.contains(digit) })
 						else { continue }
 
 						var puzzle = puzzle
-						// O(14)
+						// O(7)
 						for var cell in cellsToUpdate {
 							cell.pencilMarks.remove(digit)
 							puzzle.update(cell)
@@ -58,22 +63,5 @@ struct TwoStringKite: Algorithm {
 		}
 
 		return puzzle
-	}
-
-	/// - Complexity: O(2 \* 747 + 18) -> O(1.512)
-	/// - Returns: A maximum of 18 cells.
-	func cellsBeingSecondCandidate(firstCandidate cell: Cell, digit: Int, rows: [Row], columns: [Column]) -> [Cell] {
-		// O(2(738 + 9))
-		let candidateGroups = [rows[cell.row - 1] as any Container, columns[cell.column - 1]]
-			.filter {
-				// O(738)
-				$0.candidateCount
-					// O(9)
-					.contains { $0.value == digit && $0.count == 2 }
-
-			}
-
-		// O(2 * 9)
-		return candidateGroups.flatMap { $0.cells.filter { $0.pencilMarks.contains(digit) && $0 != cell } }
 	}
 }

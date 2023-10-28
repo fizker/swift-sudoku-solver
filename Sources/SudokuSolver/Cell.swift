@@ -49,9 +49,16 @@ public struct Cell: Equatable, CustomStringConvertible, CustomDebugStringConvert
 			}
 		}
 	}
+
+	/// The row that the cell is in, numbered 1 through 9.
 	public let row: Int
+
+	/// The column that the cell is in, numbered 1 through 9.
 	public let column: Int
+
+	/// The box that the cell is in, numbered 1 through 9.
 	public let box: Int
+
 	public var pencilMarks: Set<Int>
 	public var coordinate: Coordinate {
 		try! .init(row: row, column: column, box: box)
